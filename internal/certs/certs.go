@@ -3,6 +3,8 @@ package certs
 import (
 	"crypto/x509"
 	"encoding/pem"
+
+	"github.com/dcommisso/cabundleinspect/internal/format"
 )
 
 const (
@@ -44,4 +46,8 @@ func (c *Certstore) Load(rawCerts []byte, source string) {
 			Source:             source,
 		}
 	}
+}
+
+func (c Certificate) GetSerialNumber() string {
+	return format.ToColonNotation(c.DecodedCertificate.SerialNumber.Bytes())
 }
