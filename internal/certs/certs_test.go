@@ -388,7 +388,7 @@ func TestGetCertAttributes(t *testing.T) {
 	cs.Load(getSampleCert("multiple certificates with comments"), "test")
 	cases := map[int]struct {
 		//		expectedSubject         string
-		//		expectedIssuer          string
+		expectedIssuer       string
 		expectedSerialNumber string
 		//		sans                    SANs
 		//		expectedNotBefore       time.Time
@@ -396,28 +396,28 @@ func TestGetCertAttributes(t *testing.T) {
 	}{
 		0: {
 			//			expectedSubject:         "OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
-			//			expectedIssuer:          "OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
+			expectedIssuer:       "OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
 			expectedSerialNumber: "5d:93:8d:30:67:36:c8:06:1d:1a:c7:54:84:69:07",
 			//			expectedNotBefore:       time.Date(2008, time.October, 29, 15, 59, 56, 0, time.UTC),
 			//			expectedNotAfter:        time.Date(2030, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
 		1: {
 			//			expectedSubject:         "CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a",
-			//			expectedIssuer:          "CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a",
+			expectedIssuer:       "CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a",
 			expectedSerialNumber: "62:f6:32:6c:e5:c4:e3:68:5c:1b:62:dd:9c:2e:9d:95",
 			//			expectedNotBefore:       time.Date(2018, time.December, 20, 9, 37, 33, 0, time.UTC),
 			//			expectedNotAfter:        time.Date(2043, time.December, 20, 9, 37, 33, 0, time.UTC),
 		},
 		2: {
 			//			expectedSubject:         "SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES",
-			//			expectedIssuer:          "SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES",
+			expectedIssuer:       "SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES",
 			expectedSerialNumber: "0d:d3:e3:bc:6c:f9:6b:b1",
 			//			expectedNotBefore:       time.Date(2019, time.September, 4, 10, 0, 38, 0, time.UTC),
 			//			expectedNotAfter:        time.Date(2039, time.August, 30, 10, 0, 38, 0, time.UTC),
 		},
 		3: {
 			//			expectedSubject:         "CN=example.com",
-			//			expectedIssuer:          "CN=example.com",
+			expectedIssuer:       "CN=example.com",
 			expectedSerialNumber: "39:28:ed:76:45:6f:84:d0:77:9a:cb:0c:0f:e2:f4:d3:87:e5:b3:64",
 			//			expectedNotBefore:       time.Date(2024, time.October, 7, 15, 44, 12, 0, time.UTC),
 			//			expectedNotAfter:        time.Date(2034, time.October, 5, 15, 44, 12, 0, time.UTC),
@@ -429,9 +429,14 @@ func TestGetCertAttributes(t *testing.T) {
 
 	for n, tc := range cases {
 		t.Run("test "+fmt.Sprint(n), func(t *testing.T) {
-			got := cs.certs[n].GetSerialNumber()
-			if got != tc.expectedSerialNumber {
-				t.Errorf("expected: %v - got: %v\n", tc.expectedSerialNumber, got)
+			gotSerialNumber := cs.certs[n].GetSerialNumber()
+			if gotSerialNumber != tc.expectedSerialNumber {
+				t.Errorf("expected: %v - got: %v\n", tc.expectedSerialNumber, gotSerialNumber)
+			}
+
+			gotIssuer := cs.certs[n].GetIssuer()
+			if gotIssuer != tc.expectedIssuer {
+				t.Errorf("expected: %v - got: %v\n", tc.expectedIssuer, gotIssuer)
 			}
 		})
 	}

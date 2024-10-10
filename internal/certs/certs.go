@@ -51,3 +51,7 @@ func (c *Certstore) Load(rawCerts []byte, source string) {
 func (c Certificate) GetSerialNumber() string {
 	return format.ToColonNotation(c.DecodedCertificate.SerialNumber.Bytes())
 }
+
+func (c Certificate) GetIssuer() string {
+	return c.DecodedCertificate.Issuer.String()
+}
