@@ -55,3 +55,7 @@ func (c Certificate) GetSerialNumber() string {
 func (c Certificate) GetIssuer() string {
 	return c.DecodedCertificate.Issuer.String()
 }
+
+func (c Certificate) GetSubject() string {
+	return c.DecodedCertificate.Subject.String()
+}
