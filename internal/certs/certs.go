@@ -25,7 +25,8 @@ func NewCertstore() *Certstore {
 }
 
 func (c *Certstore) Load(rawCerts []byte, source string) {
-	for i := 0; len(rawCerts) > 0; i++ {
+	nextFreeIndex := len(c.certs)
+	for i := nextFreeIndex; len(rawCerts) > 0; i++ {
 		var block *pem.Block
 		block, rawCerts = pem.Decode(rawCerts)
 

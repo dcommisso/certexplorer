@@ -364,3 +364,20 @@ func TestNewCertstore(t *testing.T) {
 		})
 	}
 }
+
+func TestCertstoreMultipleLoads(t *testing.T) {
+	cs := NewCertstore()
+	cs.Load(getSampleCert("single certificate"), "single")
+	cs.Load(getSampleCert("3 certificates and private keys"), "3certsAndPrivateKey")
+	if len(cs.certs) != 4 {
+		t.Errorf("expected 4 elements - got: %d", len(cs.certs))
+	}
+	if cs.certs[0].Source != "single" {
+		t.Errorf("expected Source of cert #0: single - got: %s", cs.certs[0].Source)
+	}
+	for i := 1; i < 4; i++ {
+		if cs.certs[i].Source != "3certsAndPrivateKey" {
+			t.Errorf("expected Source of cert #%d: 3certsAndPrivateKey - got: %s", i, cs.certs[i].Source)
+		}
+	}
+}
