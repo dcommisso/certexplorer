@@ -3,6 +3,7 @@ package certs
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"fmt"
 	"strings"
 
 	"github.com/dcommisso/cabundleinspect/internal/format"
@@ -75,4 +76,18 @@ func (c Certificate) GetSKID() string {
 
 func (c Certificate) GetAKID() string {
 	return strings.ToUpper(format.ToColonNotation(c.DecodedCertificate.AuthorityKeyId))
+}
+
+func (c Certificate) GetSANs() string {
+	sans := []string{}
+
+	for _, dns := range c.DecodedCertificate.DNSNames {
+		sans = append(sans, fmt.Sprintf("DNS:%s", dns))
+	}
+
+	for _, ip := range c.DecodedCertificate.IPAddresses {
+		sans = append(sans, fmt.Sprintf("IP Address:%s", ip.String()))
+	}
+
+	return strings.Join(sans, ", ")
 }

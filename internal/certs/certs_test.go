@@ -390,11 +390,11 @@ func TestGetCertAttributes(t *testing.T) {
 		expectedSubject      string
 		expectedIssuer       string
 		expectedSerialNumber string
-		//		sans                    SANs
-		expectedNotBefore string
-		expectedNotAfter  string
-		expectedSKID      string
-		expectedAKID      string
+		expectedSANs         string
+		expectedNotBefore    string
+		expectedNotAfter     string
+		expectedSKID         string
+		expectedAKID         string
 	}{
 		0: {
 			expectedSubject:      "OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
@@ -429,9 +429,7 @@ func TestGetCertAttributes(t *testing.T) {
 			expectedNotAfter:     "2034-10-05 15:44:12 +0000 UTC",
 			expectedSKID:         "12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55",
 			expectedAKID:         "12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55",
-			//			sans: SANs{
-			//				DNS: []string{"example.com", "*.example.com"},
-			//				IP:  []net.IP{net.IPv4(10, 0, 0, 1), net.IPv4(127, 0, 0, 1)},
+			expectedSANs:         "DNS:example.com, DNS:*.example.com, IP Address:10.0.0.1, IP Address:127.0.0.1",
 		},
 	}
 
@@ -470,6 +468,11 @@ func TestGetCertAttributes(t *testing.T) {
 			gotAKID := cs.certs[n].GetAKID()
 			if gotAKID != tc.expectedAKID {
 				t.Errorf("expected AKID: %v - got: %v\n", tc.expectedAKID, gotAKID)
+			}
+
+			gotSANs := cs.certs[n].GetSANs()
+			if gotSANs != tc.expectedSANs {
+				t.Errorf("expected SANs: %v - got: %v\n", tc.expectedSANs, gotSANs)
 			}
 		})
 	}
