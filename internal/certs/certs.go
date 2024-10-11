@@ -59,3 +59,11 @@ func (c Certificate) GetIssuer() string {
 func (c Certificate) GetSubject() string {
 	return c.DecodedCertificate.Subject.String()
 }
+
+func (c Certificate) GetNotBefore() string {
+	return c.DecodedCertificate.NotBefore.String()
+}
+
+func (c Certificate) GetNotAfter() string {
+	return c.DecodedCertificate.NotAfter.String()
+}
