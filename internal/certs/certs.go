@@ -15,7 +15,7 @@ const (
 )
 
 type Certstore struct {
-	certs map[int]Certificate
+	Certs map[int]Certificate
 }
 
 type Certificate struct {
@@ -25,12 +25,12 @@ type Certificate struct {
 
 func NewCertstore() *Certstore {
 	return &Certstore{
-		certs: make(map[int]Certificate),
+		Certs: make(map[int]Certificate),
 	}
 }
 
 func (c *Certstore) Load(rawCerts []byte, source string) {
-	nextFreeIndex := len(c.certs)
+	nextFreeIndex := len(c.Certs)
 	for i := nextFreeIndex; len(rawCerts) > 0; i++ {
 		var block *pem.Block
 		block, rawCerts = pem.Decode(rawCerts)
@@ -44,7 +44,7 @@ func (c *Certstore) Load(rawCerts []byte, source string) {
 		}
 
 		cert, _ := x509.ParseCertificate(block.Bytes)
-		c.certs[i] = Certificate{
+		c.Certs[i] = Certificate{
 			DecodedCertificate: cert,
 			Source:             source,
 		}

@@ -353,11 +353,11 @@ func TestNewCertstore(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			cs := NewCertstore()
 			cs.Load(tc.inputCerts, tc.inputSource)
-			gotQuantity := len(cs.certs)
+			gotQuantity := len(cs.Certs)
 			if gotQuantity != tc.expectedElements {
 				t.Errorf("expected number of elements: %v - got: %v", tc.expectedElements, gotQuantity)
 			}
-			for n, cert := range cs.certs {
+			for n, cert := range cs.Certs {
 				if cert.Source != tc.expectedSource {
 					t.Errorf("expected Source: \"%s\" on certificate #%d - got: %v", tc.expectedSource, n, cert.Source)
 				}
@@ -370,15 +370,15 @@ func TestCertstoreMultipleLoads(t *testing.T) {
 	cs := NewCertstore()
 	cs.Load(getSampleCert("single certificate"), "single")
 	cs.Load(getSampleCert("3 certificates and private keys"), "3certsAndPrivateKey")
-	if len(cs.certs) != 4 {
-		t.Errorf("expected 4 elements - got: %d", len(cs.certs))
+	if len(cs.Certs) != 4 {
+		t.Errorf("expected 4 elements - got: %d", len(cs.Certs))
 	}
-	if cs.certs[0].Source != "single" {
-		t.Errorf("expected Source of cert #0: single - got: %s", cs.certs[0].Source)
+	if cs.Certs[0].Source != "single" {
+		t.Errorf("expected Source of cert #0: single - got: %s", cs.Certs[0].Source)
 	}
 	for i := 1; i < 4; i++ {
-		if cs.certs[i].Source != "3certsAndPrivateKey" {
-			t.Errorf("expected Source of cert #%d: 3certsAndPrivateKey - got: %s", i, cs.certs[i].Source)
+		if cs.Certs[i].Source != "3certsAndPrivateKey" {
+			t.Errorf("expected Source of cert #%d: 3certsAndPrivateKey - got: %s", i, cs.Certs[i].Source)
 		}
 	}
 }
@@ -549,47 +549,47 @@ rDo5uzq8
 
 	for n, tc := range cases {
 		t.Run("test "+fmt.Sprint(n), func(t *testing.T) {
-			gotSerialNumber := cs.certs[n].GetSerialNumber()
+			gotSerialNumber := cs.Certs[n].GetSerialNumber()
 			if gotSerialNumber != tc.expectedSerialNumber {
 				t.Errorf("expected: %v - got: %v\n", tc.expectedSerialNumber, gotSerialNumber)
 			}
 
-			gotIssuer := cs.certs[n].GetIssuer()
+			gotIssuer := cs.Certs[n].GetIssuer()
 			if gotIssuer != tc.expectedIssuer {
 				t.Errorf("expected: %v - got: %v\n", tc.expectedIssuer, gotIssuer)
 			}
 
-			gotSubject := cs.certs[n].GetSubject()
+			gotSubject := cs.Certs[n].GetSubject()
 			if gotSubject != tc.expectedSubject {
 				t.Errorf("expected: %v - got: %v\n", tc.expectedSubject, gotSubject)
 			}
 
-			gotNotBefore := cs.certs[n].GetNotBefore()
+			gotNotBefore := cs.Certs[n].GetNotBefore()
 			if gotNotBefore != tc.expectedNotBefore {
 				t.Errorf("expected NotBefore: %v - got: %v\n", tc.expectedNotBefore, gotNotBefore)
 			}
 
-			gotNotAfter := cs.certs[n].GetNotAfter()
+			gotNotAfter := cs.Certs[n].GetNotAfter()
 			if gotNotAfter != tc.expectedNotAfter {
 				t.Errorf("expected NotAfter: %v - got: %v\n", tc.expectedNotAfter, gotNotAfter)
 			}
 
-			gotSKID := cs.certs[n].GetSKID()
+			gotSKID := cs.Certs[n].GetSKID()
 			if gotSKID != tc.expectedSKID {
 				t.Errorf("expected SKID: %v - got: %v\n", tc.expectedSKID, gotSKID)
 			}
 
-			gotAKID := cs.certs[n].GetAKID()
+			gotAKID := cs.Certs[n].GetAKID()
 			if gotAKID != tc.expectedAKID {
 				t.Errorf("expected AKID: %v - got: %v\n", tc.expectedAKID, gotAKID)
 			}
 
-			gotSANs := cs.certs[n].GetSANs()
+			gotSANs := cs.Certs[n].GetSANs()
 			if gotSANs != tc.expectedSANs {
 				t.Errorf("expected SANs: %v - got: %v\n", tc.expectedSANs, gotSANs)
 			}
 
-			gotRawCert := cs.certs[n].GetRawCert()
+			gotRawCert := cs.Certs[n].GetRawCert()
 			if gotRawCert != tc.expectedRawCert {
 				t.Errorf("expected RawCert: %v - got: %v\n", tc.expectedRawCert, gotRawCert)
 			}
