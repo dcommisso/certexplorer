@@ -3,6 +3,7 @@ package certs
 import (
 	"crypto/x509"
 	"encoding/pem"
+	"strings"
 
 	"github.com/dcommisso/cabundleinspect/internal/format"
 )
@@ -66,4 +67,12 @@ func (c Certificate) GetNotBefore() string {
 
 func (c Certificate) GetNotAfter() string {
 	return c.DecodedCertificate.NotAfter.String()
+}
+
+func (c Certificate) GetSKID() string {
+	return strings.ToUpper(format.ToColonNotation(c.DecodedCertificate.SubjectKeyId))
+}
+
+func (c Certificate) GetAKID() string {
+	return strings.ToUpper(format.ToColonNotation(c.DecodedCertificate.AuthorityKeyId))
 }

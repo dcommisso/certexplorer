@@ -393,6 +393,8 @@ func TestGetCertAttributes(t *testing.T) {
 		//		sans                    SANs
 		expectedNotBefore string
 		expectedNotAfter  string
+		expectedSKID      string
+		expectedAKID      string
 	}{
 		0: {
 			expectedSubject:      "OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
@@ -400,6 +402,7 @@ func TestGetCertAttributes(t *testing.T) {
 			expectedSerialNumber: "5d:93:8d:30:67:36:c8:06:1d:1a:c7:54:84:69:07",
 			expectedNotBefore:    "2008-10-29 15:59:56 +0000 UTC",
 			expectedNotAfter:     "2030-01-01 00:00:00 +0000 UTC",
+			expectedSKID:         "F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D",
 		},
 		1: {
 			expectedSubject:      "CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a",
@@ -407,6 +410,7 @@ func TestGetCertAttributes(t *testing.T) {
 			expectedSerialNumber: "62:f6:32:6c:e5:c4:e3:68:5c:1b:62:dd:9c:2e:9d:95",
 			expectedNotBefore:    "2018-12-20 09:37:33 +0000 UTC",
 			expectedNotAfter:     "2043-12-20 09:37:33 +0000 UTC",
+			expectedSKID:         "01:B9:2F:EF:BF:11:86:60:F2:4F:D0:41:6E:AB:73:1F:E7:D2:6E:49",
 		},
 		2: {
 			expectedSubject:      "SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES",
@@ -414,6 +418,8 @@ func TestGetCertAttributes(t *testing.T) {
 			expectedSerialNumber: "0d:d3:e3:bc:6c:f9:6b:b1",
 			expectedNotBefore:    "2019-09-04 10:00:38 +0000 UTC",
 			expectedNotAfter:     "2039-08-30 10:00:38 +0000 UTC",
+			expectedSKID:         "9C:5F:D0:6C:63:A3:5F:93:CA:93:98:08:AD:8C:87:A5:2C:5C:C1:37",
+			expectedAKID:         "9C:5F:D0:6C:63:A3:5F:93:CA:93:98:08:AD:8C:87:A5:2C:5C:C1:37",
 		},
 		3: {
 			expectedSubject:      "CN=example.com",
@@ -421,6 +427,8 @@ func TestGetCertAttributes(t *testing.T) {
 			expectedSerialNumber: "39:28:ed:76:45:6f:84:d0:77:9a:cb:0c:0f:e2:f4:d3:87:e5:b3:64",
 			expectedNotBefore:    "2024-10-07 15:44:12 +0000 UTC",
 			expectedNotAfter:     "2034-10-05 15:44:12 +0000 UTC",
+			expectedSKID:         "12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55",
+			expectedAKID:         "12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55",
 			//			sans: SANs{
 			//				DNS: []string{"example.com", "*.example.com"},
 			//				IP:  []net.IP{net.IPv4(10, 0, 0, 1), net.IPv4(127, 0, 0, 1)},
@@ -452,6 +460,16 @@ func TestGetCertAttributes(t *testing.T) {
 			gotNotAfter := cs.certs[n].GetNotAfter()
 			if gotNotAfter != tc.expectedNotAfter {
 				t.Errorf("expected NotAfter: %v - got: %v\n", tc.expectedNotAfter, gotNotAfter)
+			}
+
+			gotSKID := cs.certs[n].GetSKID()
+			if gotSKID != tc.expectedSKID {
+				t.Errorf("expected SKID: %v - got: %v\n", tc.expectedSKID, gotSKID)
+			}
+
+			gotAKID := cs.certs[n].GetAKID()
+			if gotAKID != tc.expectedAKID {
+				t.Errorf("expected AKID: %v - got: %v\n", tc.expectedAKID, gotAKID)
 			}
 		})
 	}
