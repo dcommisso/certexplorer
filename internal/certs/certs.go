@@ -1,6 +1,7 @@
 package certs
 
 import (
+	"bytes"
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
@@ -90,4 +91,15 @@ func (c Certificate) GetSANs() string {
 	}
 
 	return strings.Join(sans, ", ")
+}
+
+func (c Certificate) GetRawCert() string {
+	block := &pem.Block{
+		Type:  "CERTIFICATE",
+		Bytes: c.DecodedCertificate.Raw,
+	}
+
+	b := new(bytes.Buffer)
+	pem.Encode(b, block)
+	return strings.TrimSpace(b.String())
 }
