@@ -102,10 +102,19 @@ func TestFileLoad(t *testing.T) {
 			inputParams:                    []string{getTestdataDir() + "tls-ca-bundle.pem"},
 			expectedCertstoreElements:      142,
 			expectedFirstCertificateSerial: "5e:c3:b7:a6:43:7f:a4:e0",
-			expectedFirstCertificateSource: "../internal/certs/testdata/tls-ca-bundle.pem",
+			expectedFirstCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
 
 			expectedLastCertificateSerial: "43:e3:71:13:d8:b3:59:14:5d:b7:ce:8c:fd:35:fd:6f:bc:05:8d:45",
-			expectedLastCertificateSource: "../internal/certs/testdata/tls-ca-bundle.pem",
+			expectedLastCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
+		},
+		"multiple files": {
+			inputParams:                    []string{getTestdataDir() + "tls-ca-bundle.pem", getTestdataDir() + "example.com.crt"},
+			expectedCertstoreElements:      143,
+			expectedFirstCertificateSerial: "5e:c3:b7:a6:43:7f:a4:e0",
+			expectedFirstCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
+
+			expectedLastCertificateSerial: "39:28:ed:76:45:6f:84:d0:77:9a:cb:0c:0f:e2:f4:d3:87:e5:b3:64",
+			expectedLastCertificateSource: getTestdataDir() + "example.com.crt",
 		},
 		"multiple certs from stdin": {
 			inputStdin:                     getTestCerts(),
@@ -115,6 +124,10 @@ func TestFileLoad(t *testing.T) {
 
 			expectedLastCertificateSerial: "6e:6a:bc:59:aa:53:be:98:39:67:a2:d2:6b:a4:3b:e6:6d:1c:d6:da",
 			expectedLastCertificateSource: "[stdin]",
+		},
+		"invalid file": {
+			inputParams:   []string{getTestdataDir() + "tls-ca-bundle.pem", "/not/existent/file"},
+			expectedError: "Error: open /not/existent/file: no such file or directory",
 		},
 	}
 
@@ -127,13 +140,14 @@ func TestFileLoad(t *testing.T) {
 				rootCmd.SetIn(strings.NewReader(tc.inputStdin))
 			}
 
-			_, stderr, err := executeTest(rootCmd, tc.inputParams...)
-			if err != nil {
-				t.Errorf("execute error: %v", err)
-			}
+			_, stderr, _ := executeTest(rootCmd, tc.inputParams...)
 
 			if stderr != tc.expectedError {
 				t.Errorf("expected error: %v - got: %v", tc.expectedError, stderr)
+			}
+
+			if tc.expectedError != "" {
+				return
 			}
 
 			gotCertstoreElements := len(config.certstore.Certs)
