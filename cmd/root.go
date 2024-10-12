@@ -29,7 +29,6 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 files. The output is flexible and it's possible to choose
 the certificate fields to show.`,
 	}
-	c.LoadFlags(cmd.Flags())
 	return cmd
 }
 
