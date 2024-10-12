@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"io"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -28,6 +29,13 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 		Long: `cabundleinspect is able to read certificates from multiple
 files. The output is flexible and it's possible to choose
 the certificate fields to show.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := LoadFilesOrStdin(cmd, c)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
 	}
 	return cmd
 }
@@ -39,4 +47,26 @@ func Execute() {
 	if err != nil {
 		os.Exit(1)
 	}
+}
+
+func LoadFilesOrStdin(cmd *cobra.Command, config *Configuration) error {
+	const stdinLabel = "[stdin]"
+
+	inputFiles := cmd.Flags().Args()
+	if len(inputFiles) > 0 {
+		for _, fname := range inputFiles {
+			b, err := os.ReadFile(fname)
+			if err != nil {
+				return err
+			}
+			config.certstore.Load(b, fname)
+		}
+	} else {
+		b, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			return err
+		}
+		config.certstore.Load(b, stdinLabel)
+	}
+	return nil
 }
