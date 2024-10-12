@@ -81,6 +81,10 @@ GJTO
 -----END CERTIFICATE-----`
 }
 
+func getTestdataDir() string {
+	return "../internal/certs/testdata/"
+}
+
 func TestFileLoad(t *testing.T) {
 	cases := map[string]struct {
 		inputParams               []string
@@ -95,7 +99,7 @@ func TestFileLoad(t *testing.T) {
 		expectedLastCertificateSource string
 	}{
 		"one big file": {
-			inputParams:                    []string{"../internal/certs/testdata/tls-ca-bundle.pem"},
+			inputParams:                    []string{getTestdataDir() + "tls-ca-bundle.pem"},
 			expectedCertstoreElements:      142,
 			expectedFirstCertificateSerial: "5e:c3:b7:a6:43:7f:a4:e0",
 			expectedFirstCertificateSource: "../internal/certs/testdata/tls-ca-bundle.pem",
