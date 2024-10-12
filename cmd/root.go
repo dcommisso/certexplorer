@@ -62,7 +62,7 @@ func LoadFilesOrStdin(cmd *cobra.Command, config *Configuration) error {
 			config.certstore.Load(b, fname)
 		}
 	} else {
-		b, err := io.ReadAll(os.Stdin)
+		b, err := io.ReadAll(cmd.InOrStdin())
 		if err != nil {
 			return err
 		}
