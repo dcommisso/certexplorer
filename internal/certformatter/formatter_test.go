@@ -2,7 +2,6 @@ package certformatter
 
 import (
 	"math/big"
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -81,9 +80,7 @@ func TestGetFormattedCertificate(t *testing.T) {
 				return
 			}
 
-			if !reflect.DeepEqual(got, tc.expectedOutput) {
-				t.Errorf("expected: %v - got: %v", tc.expectedOutput, got)
-			}
+			assert.Equal(t, tc.expectedOutput, got)
 		})
 	}
 }
