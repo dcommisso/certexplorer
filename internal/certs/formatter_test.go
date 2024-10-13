@@ -3,6 +3,8 @@ package certs
 import (
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetFormattedCertificate(t *testing.T) {
@@ -13,12 +15,13 @@ func TestGetFormattedCertificate(t *testing.T) {
 	cases := map[string]struct {
 		inputCertIndex      int
 		inputSelectedFields []Outputfield
-		expected            FormattedCertificate
+		expectedOutput      FormattedCertificate
+		expectedError       string
 	}{
 		"single field selected": {
 			inputCertIndex:      0,
 			inputSelectedFields: []Outputfield{OutputFieldSubject},
-			expected: FormattedCertificate{
+			expectedOutput: FormattedCertificate{
 				OutputFieldSubject:          "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
 				OutputFieldSourceFile:       "test",
 				OutputFieldCertificateIndex: "0",
@@ -26,19 +29,35 @@ func TestGetFormattedCertificate(t *testing.T) {
 		},
 		"all fields selected": {
 			inputCertIndex: 0,
-			expected: FormattedCertificate{
+			expectedOutput: FormattedCertificate{
 				OutputFieldSubject:          "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
 				OutputFieldIssuer:           "Issuer: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
 				OutputFieldSourceFile:       "test",
 				OutputFieldCertificateIndex: "0",
 			},
 		},
+		"OutputFieldSourceFile as invalid selected field": {
+			inputCertIndex:      0,
+			inputSelectedFields: []Outputfield{OutputFieldSourceFile},
+			expectedError:       "invalid OutputField",
+		},
+		"OutputFieldCertificateIndex as invalid selected field": {
+			inputCertIndex:      0,
+			inputSelectedFields: []Outputfield{OutputFieldSubject, OutputFieldCertificateIndex},
+			expectedError:       "invalid OutputField",
+		},
 	}
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
-			got, _ := certformatter.GetFormattedCertificate(tc.inputCertIndex, tc.inputSelectedFields...)
-			if !reflect.DeepEqual(got, tc.expected) {
-				t.Errorf("expected: %v - got: %v", tc.expected, got)
+			got, err := certformatter.GetFormattedCertificate(tc.inputCertIndex, tc.inputSelectedFields...)
+
+			if tc.expectedError != "" {
+				assert.EqualError(t, err, tc.expectedError, "error expected: %v", tc.expectedError)
+				return
+			}
+
+			if !reflect.DeepEqual(got, tc.expectedOutput) {
+				t.Errorf("expected: %v - got: %v", tc.expectedOutput, got)
 			}
 		})
 	}
