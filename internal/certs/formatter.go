@@ -1,9 +1,11 @@
 package certs
 
 import (
+	"encoding/hex"
 	"errors"
 	"slices"
 	"strconv"
+	"strings"
 )
 
 type Outputfield int
@@ -74,4 +76,19 @@ func formatSubject(c Certificate) string {
 // default OutputFieldIssuer format function
 func formatIssuer(c Certificate) string {
 	return "Issuer: " + c.GetIssuer()
+}
+
+// ToColonNotation adds colon to hex number. Example:
+// F77DC5FDC4E89A1B7764A7F51DA0CCBF87609A6D ->
+// F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D
+func ToColonNotation(hexNumber []byte) string {
+	hexString := hex.EncodeToString(hexNumber)
+
+	var splitted []string
+
+	for i := 0; i < len(hexString); i += 2 {
+		splitted = append(splitted, hexString[i:i+2])
+	}
+
+	return strings.Join(splitted, ":")
 }

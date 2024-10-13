@@ -6,8 +6,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"strings"
-
-	"github.com/dcommisso/cabundleinspect/internal/format"
 )
 
 const (
@@ -52,7 +50,7 @@ func (c *Certstore) Load(rawCerts []byte, source string) {
 }
 
 func (c Certificate) GetSerialNumber() string {
-	return format.ToColonNotation(c.DecodedCertificate.SerialNumber.Bytes())
+	return ToColonNotation(c.DecodedCertificate.SerialNumber.Bytes())
 }
 
 func (c Certificate) GetIssuer() string {
@@ -72,11 +70,11 @@ func (c Certificate) GetNotAfter() string {
 }
 
 func (c Certificate) GetSKID() string {
-	return strings.ToUpper(format.ToColonNotation(c.DecodedCertificate.SubjectKeyId))
+	return strings.ToUpper(ToColonNotation(c.DecodedCertificate.SubjectKeyId))
 }
 
 func (c Certificate) GetAKID() string {
-	return strings.ToUpper(format.ToColonNotation(c.DecodedCertificate.AuthorityKeyId))
+	return strings.ToUpper(ToColonNotation(c.DecodedCertificate.AuthorityKeyId))
 }
 
 func (c Certificate) GetSANs() string {
