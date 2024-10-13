@@ -54,8 +54,15 @@ func TestGetFormattedCertificate(t *testing.T) {
 		"all fields selected": {
 			inputCertIndex: 0,
 			expectedOutput: FormattedCertificate{
-				OutputFieldSubject:          "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
-				OutputFieldIssuer:           "Issuer: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
+				OutputFieldSubject: "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
+				OutputFieldIssuer:  "Issuer: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
+				OutputFieldSerialNumber: `Serial Number:
+    5d:93:8d:30:67:36:c8:06:1d:1a:c7:54:84:69:07`,
+				OutputFieldValidity: `Validity
+    Not Before: 2008-10-29 15:59:56 +0000 UTC
+    Not After : 2030-01-01 00:00:00 +0000 UTC`,
+				OutputFieldNotBefore:        "Not Before: 2008-10-29 15:59:56 +0000 UTC",
+				OutputFieldNotAfter:         "Not After : 2030-01-01 00:00:00 +0000 UTC",
 				OutputFieldSourceFile:       "test",
 				OutputFieldCertificateIndex: "0",
 			},

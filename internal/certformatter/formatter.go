@@ -3,6 +3,7 @@ package certformatter
 import (
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -39,8 +40,12 @@ func (c *Certstore) NewFormatter() *Formatter {
 	return &Formatter{
 		certstore: c,
 		FieldsFormatFunctions: map[Outputfield]func(c Certificate) string{
-			OutputFieldSubject: formatSubject,
-			OutputFieldIssuer:  formatIssuer,
+			OutputFieldSubject:      formatSubject,
+			OutputFieldIssuer:       formatIssuer,
+			OutputFieldSerialNumber: formatSerialNumber,
+			OutputFieldValidity:     formatValidity,
+			OutputFieldNotBefore:    formatNotBefore,
+			OutputFieldNotAfter:     formatNotAfter,
 		},
 	}
 }
@@ -76,6 +81,26 @@ func formatSubject(c Certificate) string {
 // default OutputFieldIssuer format function
 func formatIssuer(c Certificate) string {
 	return "Issuer: " + c.GetIssuer()
+}
+
+// default OutputFieldSerialNumber format function
+func formatSerialNumber(c Certificate) string {
+	return fmt.Sprintf("Serial Number:\n    %s", c.GetSerialNumber())
+}
+
+// default OutputFieldValidity format function
+func formatValidity(c Certificate) string {
+	return fmt.Sprintf("Validity\n    Not Before: %s\n    Not After : %s", c.GetNotBefore(), c.GetNotAfter())
+}
+
+// default OutputFieldNotBefore format function
+func formatNotBefore(c Certificate) string {
+	return fmt.Sprintf("Not Before: %s", c.GetNotBefore())
+}
+
+// default OutputFieldNotAfter format function
+func formatNotAfter(c Certificate) string {
+	return fmt.Sprintf("Not After : %s", c.GetNotAfter())
 }
 
 // ToColonNotation adds colon to hex number. Example:
