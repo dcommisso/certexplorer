@@ -49,9 +49,9 @@ func (c *Certstore) NewFormatter() *Formatter {
 // otherwise all the fields are returned.
 func (f *Formatter) GetFormattedCertificate(certIndex int, selectedFields ...Outputfield) (FormattedCertificate, error) {
 
-	// OutputFieldSourceFile and OutputFieldCertificateIndex are metadata. They
-	// are always present and cannot be selected.
-	if slices.Contains(selectedFields, OutputFieldSourceFile) || slices.Contains(selectedFields, OutputFieldCertificateIndex) {
+	// OutputFieldCertificateIndex is metadata. It's always present and should
+	// not be selected.
+	if slices.Contains(selectedFields, OutputFieldCertificateIndex) {
 		return FormattedCertificate{}, errors.New("invalid OutputField")
 	}
 

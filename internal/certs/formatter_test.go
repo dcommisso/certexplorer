@@ -38,10 +38,10 @@ func TestGetFormattedCertificate(t *testing.T) {
 		},
 		"OutputFieldSourceFile as invalid selected field": {
 			inputCertIndex:      0,
-			inputSelectedFields: []Outputfield{OutputFieldSourceFile},
+			inputSelectedFields: []Outputfield{OutputFieldCertificateIndex},
 			expectedError:       "invalid OutputField",
 		},
-		"OutputFieldCertificateIndex as invalid selected field": {
+		"mixed valid and invalid fields": {
 			inputCertIndex:      0,
 			inputSelectedFields: []Outputfield{OutputFieldSubject, OutputFieldCertificateIndex},
 			expectedError:       "invalid OutputField",
