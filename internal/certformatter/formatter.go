@@ -1,4 +1,4 @@
-package certs
+package certformatter
 
 import (
 	"encoding/hex"

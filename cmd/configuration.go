@@ -1,15 +1,15 @@
 package cmd
 
 import (
-	"github.com/dcommisso/cabundleinspect/internal/certs"
+	"github.com/dcommisso/cabundleinspect/internal/certformatter"
 )
 
 type Configuration struct {
-	certstore *certs.Certstore
+	certstore *certformatter.Certstore
 }
 
 func NewConfiguration() *Configuration {
 	return &Configuration{
-		certstore: certs.NewCertstore(),
+		certstore: certformatter.NewCertstore(),
 	}
 }
