@@ -49,6 +49,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldSKID:         formatSKID,
 			OutputFieldAKID:         formatAKID,
 			OutputFieldSANs:         formatSANs,
+			OutputFieldRawCert:      formatRawCert,
 			OutputFieldSourceFile:   formatSourceFile,
 		},
 	}
@@ -139,6 +140,18 @@ func formatSANs(c Certificate) string {
 		sans = "-"
 	}
 	return fmt.Sprintf("%s:\n    %s", label, sans)
+}
+
+// default OutputFieldRawCert format function
+func formatRawCert(c Certificate) string {
+	rawCert := c.GetRawCert()
+	rawCertLines := strings.Split(rawCert, "\n")
+	rawCertFormattedLines := []string{}
+	for _, line := range rawCertLines {
+		rawCertFormattedLines = append(rawCertFormattedLines, "    "+line)
+	}
+	rawCertFormatted := strings.Join(rawCertFormattedLines, "\n")
+	return fmt.Sprintf("Raw Certificate:\n%s", rawCertFormatted)
 }
 
 // ToColonNotation adds colon to hex number. Example:
