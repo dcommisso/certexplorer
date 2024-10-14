@@ -51,7 +51,7 @@ func TestGetFormattedCertificate(t *testing.T) {
 				OutputFieldCertificateIndex: "0",
 			},
 		},
-		"all fields selected": {
+		"all fields selected - some empty": {
 			inputCertIndex: 0,
 			expectedOutput: FormattedCertificate{
 				OutputFieldSubject: "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
@@ -65,6 +65,8 @@ func TestGetFormattedCertificate(t *testing.T) {
 				OutputFieldNotAfter:  "Not After : 2030-01-01 00:00:00 +0000 UTC",
 				OutputFieldSKID: `Subject Key Identifier:
     F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D`,
+				OutputFieldAKID: `Authority Key Identifier:
+    -`,
 				OutputFieldSourceFile:       "From file: test",
 				OutputFieldCertificateIndex: "0",
 			},

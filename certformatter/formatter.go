@@ -47,6 +47,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldNotBefore:    formatNotBefore,
 			OutputFieldNotAfter:     formatNotAfter,
 			OutputFieldSKID:         formatSKID,
+			OutputFieldAKID:         formatAKID,
 			OutputFieldSourceFile:   formatSourceFile,
 		},
 	}
@@ -111,6 +112,15 @@ func formatSKID(c Certificate) string {
 		return fmt.Sprint("Subject Key Identifier:\n    -")
 	}
 	return fmt.Sprintf("Subject Key Identifier:\n    %s", c.GetSKID())
+}
+
+// default OutputFieldAKID format function
+func formatAKID(c Certificate) string {
+	akid := c.GetAKID()
+	if akid == "" {
+		return fmt.Sprint("Authority Key Identifier:\n    -")
+	}
+	return fmt.Sprintf("Authority Key Identifier:\n    %s", c.GetAKID())
 }
 
 // default OutputFieldSourceFile format function
