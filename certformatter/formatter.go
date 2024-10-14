@@ -106,6 +106,10 @@ func formatNotAfter(c Certificate) string {
 
 // default OutputFieldSKID format function
 func formatSKID(c Certificate) string {
+	skid := c.GetSKID()
+	if skid == "" {
+		return fmt.Sprint("Subject Key Identifier:\n    -")
+	}
 	return fmt.Sprintf("Subject Key Identifier:\n    %s", c.GetSKID())
 }
 
