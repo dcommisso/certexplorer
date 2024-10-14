@@ -67,6 +67,8 @@ func TestGetFormattedCertificate(t *testing.T) {
     F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D`,
 				OutputFieldAKID: `Authority Key Identifier:
     -`,
+				OutputFieldSANs: `Subject Alternative Name:
+    -`,
 				OutputFieldSourceFile:       "From file: test",
 				OutputFieldCertificateIndex: "0",
 			},

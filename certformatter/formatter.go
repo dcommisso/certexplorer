@@ -48,6 +48,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldNotAfter:     formatNotAfter,
 			OutputFieldSKID:         formatSKID,
 			OutputFieldAKID:         formatAKID,
+			OutputFieldSANs:         formatSANs,
 			OutputFieldSourceFile:   formatSourceFile,
 		},
 	}
@@ -126,6 +127,16 @@ func formatAKID(c Certificate) string {
 // default OutputFieldSourceFile format function
 func formatSourceFile(c Certificate) string {
 	return fmt.Sprintf("From file: %s", c.Source)
+}
+
+// default OutputFieldSANs format function
+func formatSANs(c Certificate) string {
+	label := "Subject Alternative Name"
+	sans := c.GetSANs()
+	if sans == "" {
+		sans = "-"
+	}
+	return fmt.Sprintf("%s:\n    %s", label, sans)
 }
 
 // ToColonNotation adds colon to hex number. Example:
