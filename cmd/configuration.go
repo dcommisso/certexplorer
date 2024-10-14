@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/dcommisso/cabundleinspect/internal/certformatter"
+	"github.com/dcommisso/cabundleinspect/certformatter"
 )
 
 type Configuration struct {

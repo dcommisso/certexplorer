@@ -93,7 +93,7 @@ GJTO
 }
 
 func getTestdataDir() string {
-	return "../internal/certformatter/testdata/"
+	return "../certformatter/testdata/"
 }
 
 func TestFileLoad(t *testing.T) {
