@@ -42,12 +42,12 @@ func TestGetFormattedCertificate(t *testing.T) {
 		expectedOutput      FormattedCertificate
 		expectedError       string
 	}{
-		"single field selected": {
+		"two fields selected": {
 			inputCertIndex:      0,
-			inputSelectedFields: []Outputfield{OutputFieldSubject},
+			inputSelectedFields: []Outputfield{OutputFieldSourceFile, OutputFieldSubject},
 			expectedOutput: FormattedCertificate{
 				OutputFieldSubject:          "Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
-				OutputFieldSourceFile:       "test",
+				OutputFieldSourceFile:       "From file: test",
 				OutputFieldCertificateIndex: "0",
 			},
 		},
@@ -65,7 +65,7 @@ func TestGetFormattedCertificate(t *testing.T) {
 				OutputFieldNotAfter:  "Not After : 2030-01-01 00:00:00 +0000 UTC",
 				OutputFieldSKID: `Subject Key Identifier:
     F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D`,
-				OutputFieldSourceFile:       "test",
+				OutputFieldSourceFile:       "From file: test",
 				OutputFieldCertificateIndex: "0",
 			},
 		},

@@ -47,6 +47,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldNotBefore:    formatNotBefore,
 			OutputFieldNotAfter:     formatNotAfter,
 			OutputFieldSKID:         formatSKID,
+			OutputFieldSourceFile:   formatSourceFile,
 		},
 	}
 }
@@ -69,7 +70,6 @@ func (f *Formatter) GetFormattedCertificate(certIndex int, selectedFields ...Out
 			fcToReturn[field] = formatFunction(f.certstore.Certs[certIndex])
 		}
 	}
-	fcToReturn[OutputFieldSourceFile] = f.certstore.Certs[certIndex].Source
 	fcToReturn[OutputFieldCertificateIndex] = strconv.Itoa(certIndex)
 	return fcToReturn, nil
 }
@@ -107,6 +107,11 @@ func formatNotAfter(c Certificate) string {
 // default OutputFieldSKID format function
 func formatSKID(c Certificate) string {
 	return fmt.Sprintf("Subject Key Identifier:\n    %s", c.GetSKID())
+}
+
+// default OutputFieldSourceFile format function
+func formatSourceFile(c Certificate) string {
+	return fmt.Sprintf("From file: %s", c.Source)
 }
 
 // ToColonNotation adds colon to hex number. Example:
