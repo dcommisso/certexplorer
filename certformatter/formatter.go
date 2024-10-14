@@ -108,20 +108,22 @@ func formatNotAfter(c Certificate) string {
 
 // default OutputFieldSKID format function
 func formatSKID(c Certificate) string {
+	label := "Subject Key Identifier"
 	skid := c.GetSKID()
 	if skid == "" {
-		return fmt.Sprint("Subject Key Identifier:\n    -")
+		skid = "-"
 	}
-	return fmt.Sprintf("Subject Key Identifier:\n    %s", c.GetSKID())
+	return fmt.Sprintf("%s:\n    %s", label, skid)
 }
 
 // default OutputFieldAKID format function
 func formatAKID(c Certificate) string {
+	label := "Authority Key Identifier"
 	akid := c.GetAKID()
 	if akid == "" {
-		return fmt.Sprint("Authority Key Identifier:\n    -")
+		akid = "-"
 	}
-	return fmt.Sprintf("Authority Key Identifier:\n    %s", c.GetAKID())
+	return fmt.Sprintf("%s:\n    %s", label, akid)
 }
 
 // default OutputFieldSourceFile format function
