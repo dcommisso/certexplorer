@@ -31,7 +31,7 @@ type FormattedCertificate map[Outputfield]string
 type Formatter struct {
 	certstore *Certstore
 	//FieldsFormatFunctions contains the format function of each field
-	FieldsFormatFunctions map[Outputfield]func(c Certificate) string
+	fieldsFormatFunctions map[Outputfield]func(c Certificate) string
 	// CertstoreFormatFunction formats the certstore or part of it
 	CertstoreFormatFunction func([]FormattedCertificate) string
 }
@@ -39,7 +39,7 @@ type Formatter struct {
 func (c *Certstore) NewFormatter() *Formatter {
 	return &Formatter{
 		certstore: c,
-		FieldsFormatFunctions: map[Outputfield]func(c Certificate) string{
+		fieldsFormatFunctions: map[Outputfield]func(c Certificate) string{
 			OutputFieldSubject:      formatSubject,
 			OutputFieldIssuer:       formatIssuer,
 			OutputFieldSerialNumber: formatSerialNumber,
@@ -55,6 +55,12 @@ func (c *Certstore) NewFormatter() *Formatter {
 	}
 }
 
+// SetFieldFormatFunction substitutes the default format function for a field
+// with the provided one.
+func (f *Formatter) SetFieldFormatFunction(field Outputfield, formatFunc func(c Certificate) string) {
+	f.fieldsFormatFunctions[field] = formatFunc
+}
+
 // GetFormattedCertificate returns a FormattedCertificate with the fields
 // rendered using the functions defined in FieldsFormatFunctions. If
 // selectedFields parameter is defined only the selected fields are returned,
@@ -68,7 +74,7 @@ func (f *Formatter) GetFormattedCertificate(certIndex int, selectedFields ...Out
 	}
 
 	fcToReturn := make(FormattedCertificate)
-	for field, formatFunction := range f.FieldsFormatFunctions {
+	for field, formatFunction := range f.fieldsFormatFunctions {
 		if len(selectedFields) == 0 || slices.Contains(selectedFields, field) {
 			fcToReturn[field] = formatFunction(f.certstore.Certs[certIndex])
 		}

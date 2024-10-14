@@ -184,3 +184,27 @@ func TestGetFormattedCertificate(t *testing.T) {
 		})
 	}
 }
+
+func TestSetFieldFormatFunction(t *testing.T) {
+	cs := NewCertstore()
+	cs.Load(getSampleCert("multiple certificates with comments"), "test")
+	certformatter := cs.NewFormatter()
+
+	certformatter.SetFieldFormatFunction(OutputFieldSubject, func(c Certificate) string {
+		return "Alternate Subject description: " + c.GetSubject()
+	})
+
+	t.Run("set custom subject format function", func(t *testing.T) {
+		got, err := certformatter.GetFormattedCertificate(0, OutputFieldSubject)
+		if err != nil {
+			t.Errorf("error: %v", err)
+		}
+
+		expected := FormattedCertificate{
+			OutputFieldSubject:          "Alternate Subject description: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES",
+			OutputFieldCertificateIndex: "0",
+		}
+
+		assert.Equal(t, expected, got)
+	})
+}
