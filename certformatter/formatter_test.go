@@ -61,8 +61,10 @@ func TestGetFormattedCertificate(t *testing.T) {
 				OutputFieldValidity: `Validity
     Not Before: 2008-10-29 15:59:56 +0000 UTC
     Not After : 2030-01-01 00:00:00 +0000 UTC`,
-				OutputFieldNotBefore:        "Not Before: 2008-10-29 15:59:56 +0000 UTC",
-				OutputFieldNotAfter:         "Not After : 2030-01-01 00:00:00 +0000 UTC",
+				OutputFieldNotBefore: "Not Before: 2008-10-29 15:59:56 +0000 UTC",
+				OutputFieldNotAfter:  "Not After : 2030-01-01 00:00:00 +0000 UTC",
+				OutputFieldSKID: `Subject Key Identifier:
+    F7:7D:C5:FD:C4:E8:9A:1B:77:64:A7:F5:1D:A0:CC:BF:87:60:9A:6D`,
 				OutputFieldSourceFile:       "test",
 				OutputFieldCertificateIndex: "0",
 			},

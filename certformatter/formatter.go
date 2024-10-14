@@ -46,6 +46,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldValidity:     formatValidity,
 			OutputFieldNotBefore:    formatNotBefore,
 			OutputFieldNotAfter:     formatNotAfter,
+			OutputFieldSKID:         formatSKID,
 		},
 	}
 }
@@ -101,6 +102,11 @@ func formatNotBefore(c Certificate) string {
 // default OutputFieldNotAfter format function
 func formatNotAfter(c Certificate) string {
 	return fmt.Sprintf("Not After : %s", c.GetNotAfter())
+}
+
+// default OutputFieldSKID format function
+func formatSKID(c Certificate) string {
+	return fmt.Sprintf("Subject Key Identifier:\n    %s", c.GetSKID())
 }
 
 // ToColonNotation adds colon to hex number. Example:
