@@ -64,6 +64,10 @@ func (f *Formatter) SetFieldFormatFunction(field Outputfield, formatFunc func(c 
 	f.fieldsFormatFunctions[field] = formatFunc
 }
 
+func (f *Formatter) SetComposeFunction(composeFunc func(certs []FormattedCertificate, orderedFieldsToRender []Outputfield) (string, error)) {
+	f.composeFunction = composeFunc
+}
+
 // GetFormattedCertificate returns a FormattedCertificate with the fields
 // rendered using the functions defined in FieldsFormatFunctions. If
 // selectedFields parameter is defined only the selected fields are returned,
