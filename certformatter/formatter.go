@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"slices"
 	"strconv"
 	"strings"
 	"text/tabwriter"
@@ -69,25 +68,15 @@ func (f *Formatter) SetComposeFunction(composeFunc func(certs []FormattedCertifi
 }
 
 // GetFormattedCertificate returns a FormattedCertificate with the fields
-// rendered using the functions defined in FieldsFormatFunctions. If
-// selectedFields parameter is defined only the selected fields are returned,
-// otherwise all the fields are returned.
-func (f *Formatter) GetFormattedCertificate(certIndex int, selectedFields ...Outputfield) (FormattedCertificate, error) {
-
-	// OutputFieldCertificateIndex is metadata. It's always present and should
-	// not be selected.
-	if slices.Contains(selectedFields, OutputFieldCertificateIndex) {
-		return FormattedCertificate{}, errors.New("invalid OutputField")
-	}
+// rendered using the functions defined in FieldsFormatFunctions.
+func (f *Formatter) GetFormattedCertificate(certIndex int) FormattedCertificate {
 
 	fcToReturn := make(FormattedCertificate)
 	for field, formatFunction := range f.fieldsFormatFunctions {
-		if len(selectedFields) == 0 || slices.Contains(selectedFields, field) {
-			fcToReturn[field] = formatFunction(f.certstore.Certs[certIndex])
-		}
+		fcToReturn[field] = formatFunction(f.certstore.Certs[certIndex])
 	}
 	fcToReturn[OutputFieldCertificateIndex] = strconv.Itoa(certIndex)
-	return fcToReturn, nil
+	return fcToReturn
 }
 
 func (f *Formatter) ComposeFormattedCertificates(formattedCertificates []FormattedCertificate, orderedFieldsToRender []Outputfield) (string, error) {
