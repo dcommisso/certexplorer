@@ -35,6 +35,7 @@ func TestIntegration(t *testing.T) {
         Not Before: 2008-10-29 15:59:56 +0000 UTC
         Not After : 2030-01-01 00:00:00 +0000 UTC
     From file: testdata/fewCertificates.pem
+
 [4] Subject: CN=example.com
     Validity
         Not Before: 2024-10-07 15:44:12 +0000 UTC

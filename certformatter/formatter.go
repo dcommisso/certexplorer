@@ -184,6 +184,7 @@ func composeCertificates(certs []FormattedCertificate, orderedFieldsToRender []O
 		for i := 1; i < len(certLines); i++ {
 			fmt.Fprintf(w, "\t%s\n", certLines[i])
 		}
+		fmt.Fprintln(w)
 	}
 	w.Flush()
 	return strings.TrimSpace(b.String()), nil

@@ -571,6 +571,7 @@ func TestComposeFormattedCertificates(t *testing.T) {
         3cp1JPJuZpbks3EkjqeyzKgfWsJWWi/9q68zbubW5oOgHk2548BO9x2njvEVfrTg
         rDo5uzq8
         -----END CERTIFICATE-----
+
 [0] Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES
     From file: test
     Raw Certificate:
