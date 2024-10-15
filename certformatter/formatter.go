@@ -1,12 +1,14 @@
 package certformatter
 
 import (
+	"bytes"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"slices"
 	"strconv"
 	"strings"
+	"text/tabwriter"
 )
 
 type Outputfield int
@@ -33,7 +35,7 @@ type Formatter struct {
 	//FieldsFormatFunctions contains the format function of each field
 	fieldsFormatFunctions map[Outputfield]func(c Certificate) string
 	// CertstoreFormatFunction formats the certstore or part of it
-	CertstoreFormatFunction func([]FormattedCertificate) string
+	composeFunction func(certs []FormattedCertificate, orderedFieldsToRender []Outputfield) (string, error)
 }
 
 func (c *Certstore) NewFormatter() *Formatter {
@@ -52,6 +54,7 @@ func (c *Certstore) NewFormatter() *Formatter {
 			OutputFieldRawCert:      formatRawCert,
 			OutputFieldSourceFile:   formatSourceFile,
 		},
+		composeFunction: composeCertificates,
 	}
 }
 
@@ -81,6 +84,10 @@ func (f *Formatter) GetFormattedCertificate(certIndex int, selectedFields ...Out
 	}
 	fcToReturn[OutputFieldCertificateIndex] = strconv.Itoa(certIndex)
 	return fcToReturn, nil
+}
+
+func (f *Formatter) ComposeFormattedCertificates(formattedCertificates []FormattedCertificate, orderedFieldsToRender []Outputfield) (string, error) {
+	return f.composeFunction(formattedCertificates, orderedFieldsToRender)
 }
 
 // default OutputFieldSubject format function
@@ -158,6 +165,35 @@ func formatRawCert(c Certificate) string {
 	}
 	rawCertFormatted := strings.Join(rawCertFormattedLines, "\n")
 	return fmt.Sprintf("Raw Certificate:\n%s", rawCertFormatted)
+}
+
+// default composeFunction
+func composeCertificates(certs []FormattedCertificate, orderedFieldsToRender []Outputfield) (string, error) {
+
+	b := bytes.Buffer{}
+	w := tabwriter.NewWriter(&b, 0, 0, 0, ' ', tabwriter.AlignRight)
+
+	if len(certs) == 0 {
+		return "", errors.New("certs cannot be empty")
+	}
+
+	if len(orderedFieldsToRender) == 0 {
+		return "", errors.New("orderedFieldsToRender cannot be empty")
+	}
+
+	for _, cert := range certs {
+		certLines := []string{}
+		for _, field := range orderedFieldsToRender {
+			fieldLines := strings.Split(cert[field], "\n")
+			certLines = append(certLines, fieldLines...)
+		}
+		fmt.Fprintf(w, "[%s] \t%s\n", cert[OutputFieldCertificateIndex], certLines[0])
+		for i := 1; i < len(certLines); i++ {
+			fmt.Fprintf(w, "\t%s\n", certLines[i])
+		}
+	}
+	w.Flush()
+	return strings.TrimSpace(b.String()), nil
 }
 
 // ToColonNotation adds colon to hex number. Example:
