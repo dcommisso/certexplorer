@@ -445,6 +445,17 @@ func TestComposeFormattedCertificates(t *testing.T) {
         uu8wd+RU4riEmViAqhOLUTpPSPaLtrM=
         -----END CERTIFICATE-----`,
 		},
+		"empty formattedCertificates": {
+			inputFormattedCertificates: []FormattedCertificate{},
+			inputFieldsOrder:           []Outputfield{OutputFieldSubject, OutputFieldSourceFile, OutputFieldRawCert},
+			expectedError:              "certs cannot be empty",
+		},
+		"empty outputfield": {
+			inputFormattedCertificates: []FormattedCertificate{
+				formattedCertificates["formatted cert with some empty fields"]},
+			inputFieldsOrder: []Outputfield{},
+			expectedError:    "orderedFieldsToRender cannot be empty",
+		},
 	}
 
 	for name, tc := range cases {
