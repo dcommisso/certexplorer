@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/spf13/cobra"
+	"github.com/stretchr/testify/assert"
 )
 
 func executeTest(cmd *cobra.Command, args ...string) (std, stderr string, reterr error) {
@@ -110,7 +111,7 @@ func TestFileLoad(t *testing.T) {
 		expectedLastCertificateSource string
 	}{
 		"one big file": {
-			inputParams:                    []string{"list", getTestdataDir() + "tls-ca-bundle.pem"},
+			inputParams:                    []string{getTestdataDir() + "tls-ca-bundle.pem"},
 			expectedCertstoreElements:      142,
 			expectedFirstCertificateSerial: "5e:c3:b7:a6:43:7f:a4:e0",
 			expectedFirstCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
@@ -119,7 +120,7 @@ func TestFileLoad(t *testing.T) {
 			expectedLastCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
 		},
 		"multiple files": {
-			inputParams:                    []string{"list", getTestdataDir() + "tls-ca-bundle.pem", getTestdataDir() + "example.com.crt"},
+			inputParams:                    []string{getTestdataDir() + "tls-ca-bundle.pem", getTestdataDir() + "example.com.crt"},
 			expectedCertstoreElements:      143,
 			expectedFirstCertificateSerial: "5e:c3:b7:a6:43:7f:a4:e0",
 			expectedFirstCertificateSource: getTestdataDir() + "tls-ca-bundle.pem",
@@ -128,7 +129,7 @@ func TestFileLoad(t *testing.T) {
 			expectedLastCertificateSource: getTestdataDir() + "example.com.crt",
 		},
 		"multiple certs from stdin": {
-			inputParams:                    []string{"list"},
+			inputParams:                    []string{},
 			inputStdin:                     getTestCerts(),
 			expectedCertstoreElements:      3,
 			expectedFirstCertificateSerial: "39:28:ed:76:45:6f:84:d0:77:9a:cb:0c:0f:e2:f4:d3:87:e5:b3:64",
@@ -138,7 +139,7 @@ func TestFileLoad(t *testing.T) {
 			expectedLastCertificateSource: "[stdin]",
 		},
 		"invalid file": {
-			inputParams:   []string{"list", getTestdataDir() + "tls-ca-bundle.pem", "/not/existent/file"},
+			inputParams:   []string{getTestdataDir() + "tls-ca-bundle.pem", "/not/existent/file"},
 			expectedError: "Error: open /not/existent/file: no such file or directory",
 		},
 	}
@@ -146,47 +147,36 @@ func TestFileLoad(t *testing.T) {
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
 			config := NewConfiguration()
-			rootCmd := config.GetRootCmd()
+			testCmd := &cobra.Command{
+				RunE: func(cmd *cobra.Command, args []string) error {
+					err := LoadFilesOrStdin(cmd, config)
+					if err != nil {
+						return err
+					}
+					return nil
+				},
+			}
 
 			if tc.inputStdin != "" {
-				rootCmd.SetIn(strings.NewReader(tc.inputStdin))
+				testCmd.SetIn(strings.NewReader(tc.inputStdin))
 			}
 
-			_, stderr, _ := executeTest(rootCmd, tc.inputParams...)
+			_, stderr, _ := executeTest(testCmd, tc.inputParams...)
 
-			if stderr != tc.expectedError {
-				t.Errorf("expected error: %v - got: %v", tc.expectedError, stderr)
-			}
+			assert.Equal(t, tc.expectedError, stderr)
 
 			if tc.expectedError != "" {
 				return
 			}
 
-			gotCertstoreElements := len(config.certstore.Certs)
-			if gotCertstoreElements != tc.expectedCertstoreElements {
-				t.Errorf("expected number of certificates: %v - got: %v", tc.expectedCertstoreElements, gotCertstoreElements)
-			}
-
-			gotFirstCertificateSerial := config.certstore.Certs[0].GetSerialNumber()
-			if gotFirstCertificateSerial != tc.expectedFirstCertificateSerial {
-				t.Errorf("expected first certificate serial: %v - got: %v", tc.expectedFirstCertificateSerial, gotFirstCertificateSerial)
-			}
-
 			lastCertificateIndex := len(config.certstore.Certs) - 1
-			gotLastCertificateSerial := config.certstore.Certs[lastCertificateIndex].GetSerialNumber()
-			if gotLastCertificateSerial != tc.expectedLastCertificateSerial {
-				t.Errorf("expected last certificate serial: %v - got: %v", tc.expectedLastCertificateSerial, gotLastCertificateSerial)
-			}
+			assert.Equal(t, tc.expectedCertstoreElements, len(config.certstore.Certs))
+			assert.Equal(t, tc.expectedFirstCertificateSerial, config.certstore.Certs[0].GetSerialNumber())
+			assert.Equal(t, tc.expectedLastCertificateSerial, config.certstore.Certs[lastCertificateIndex].GetSerialNumber())
+			assert.Equal(t, tc.expectedFirstCertificateSource, config.certstore.Certs[0].Source)
 
-			gotFirstCertificateSource := config.certstore.Certs[0].Source
-			if gotFirstCertificateSource != tc.expectedFirstCertificateSource {
-				t.Errorf("expected first certificate source: %v - got: %v", tc.expectedFirstCertificateSource, gotFirstCertificateSource)
-			}
+			assert.Equal(t, tc.expectedLastCertificateSource, config.certstore.Certs[lastCertificateIndex].Source)
 
-			gotLastCertificateSource := config.certstore.Certs[lastCertificateIndex].Source
-			if gotLastCertificateSource != tc.expectedLastCertificateSource {
-				t.Errorf("expected last certificate source: %v - got: %v", tc.expectedLastCertificateSource, gotLastCertificateSource)
-			}
 		})
 	}
 }
