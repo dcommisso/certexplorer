@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/dcommisso/cabundleinspect/certformatter"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
@@ -174,9 +175,7 @@ func TestFileLoad(t *testing.T) {
 			assert.Equal(t, tc.expectedFirstCertificateSerial, config.certstore.Certs[0].GetSerialNumber())
 			assert.Equal(t, tc.expectedLastCertificateSerial, config.certstore.Certs[lastCertificateIndex].GetSerialNumber())
 			assert.Equal(t, tc.expectedFirstCertificateSource, config.certstore.Certs[0].Source)
-
 			assert.Equal(t, tc.expectedLastCertificateSource, config.certstore.Certs[lastCertificateIndex].Source)
-
 		})
 	}
 }
@@ -220,6 +219,11 @@ func TestList(t *testing.T) {
     Validity
         Not Before: 2024-10-07 15:44:12 +0000 UTC
         Not After : 2034-10-05 15:44:12 +0000 UTC`,
+		},
+		"all certificates - all fields": {
+			inputParams:   []string{"list", getTestdataDir() + "fewCertificates.pem"},
+			expectedOut:   certformatter.FewCertificatesAllCertsAllField,
+			expectedError: "",
 		},
 	}
 

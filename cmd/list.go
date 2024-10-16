@@ -39,6 +39,19 @@ to quickly create a Cobra application.`,
 				"source":    certformatter.OutputFieldSourceFile,
 			}
 
+			// fields order when no fields are selected
+			orderedDefaultFields := []string{
+				"serial",
+				"issuer",
+				"subject",
+				"san",
+				"validity",
+				"akid",
+				"skid",
+				"source",
+				"raw",
+			}
+
 			selectedFields, _ := cmd.Flags().GetStringSlice("fields")
 
 			// return error if selectedFields contains invalid field
@@ -46,6 +59,11 @@ to quickly create a Cobra application.`,
 				if _, ok := validSelectors[selectedField]; !ok {
 					return errors.New("invalid field")
 				}
+			}
+
+			// if no field was selected use default
+			if len(selectedFields) == 0 {
+				selectedFields = orderedDefaultFields
 			}
 
 			// convert string selected fields to Outputfields

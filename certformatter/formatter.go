@@ -184,6 +184,7 @@ func composeCertificates(certs []FormattedCertificate, orderedFieldsToRender []O
 		for i := 1; i < len(certLines); i++ {
 			fmt.Fprintf(w, "\t%s\n", certLines[i])
 		}
+		// separate each certificate with an empty line
 		fmt.Fprintln(w)
 	}
 	w.Flush()
