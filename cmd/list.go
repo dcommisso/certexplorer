@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"errors"
+
+	"github.com/dcommisso/cabundleinspect/certformatter"
 	"github.com/spf13/cobra"
 )
 
@@ -19,8 +22,55 @@ to quickly create a Cobra application.`,
 			if err != nil {
 				return err
 			}
+
+			formatter := c.certstore.NewFormatter()
+
+			validSelectors := map[string]certformatter.Outputfield{
+				"serial":    certformatter.OutputFieldSerialNumber,
+				"issuer":    certformatter.OutputFieldIssuer,
+				"subject":   certformatter.OutputFieldSubject,
+				"validity":  certformatter.OutputFieldValidity,
+				"notbefore": certformatter.OutputFieldNotBefore,
+				"notafter":  certformatter.OutputFieldNotAfter,
+				"skid":      certformatter.OutputFieldSKID,
+				"akid":      certformatter.OutputFieldAKID,
+				"san":       certformatter.OutputFieldSANs,
+				"raw":       certformatter.OutputFieldRawCert,
+				"source":    certformatter.OutputFieldSourceFile,
+			}
+
+			selectedFields, _ := cmd.Flags().GetStringSlice("fields")
+
+			// return error if selectedFields contains invalid field
+			for _, selectedField := range selectedFields {
+				if _, ok := validSelectors[selectedField]; !ok {
+					return errors.New("invalid field")
+				}
+			}
+
+			// convert string selected fields to Outputfields
+			selectedOutputField := []certformatter.Outputfield{}
+			for _, field := range selectedFields {
+				selectedOutputField = append(selectedOutputField, validSelectors[field])
+			}
+
+			certsToRender := []certformatter.FormattedCertificate{}
+			for i := 0; i < len(c.certstore.Certs); i++ {
+				certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+			}
+			renderedOutput, err := formatter.ComposeFormattedCertificates(certsToRender, selectedOutputField)
+			if err != nil {
+				return err
+			}
+			cmd.Println(renderedOutput)
+
 			return nil
 		},
 	}
+	getListCmdSetFlags(cmd)
 	return cmd
+}
+
+func getListCmdSetFlags(c *cobra.Command) {
+	c.Flags().StringSliceP("fields", "f", []string{}, "Fields to show.")
 }
