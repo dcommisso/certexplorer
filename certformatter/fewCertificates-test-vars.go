@@ -178,3 +178,82 @@ const FewCertificatesAllCertsAllField = `[0] Serial Number:
         3cp1JPJuZpbks3EkjqeyzKgfWsJWWi/9q68zbubW5oOgHk2548BO9x2njvEVfrTg
         rDo5uzq8
         -----END CERTIFICATE-----`
+
+const SomeCertificatesAllCertsAllField = `[1] Serial Number:
+        62:f6:32:6c:e5:c4:e3:68:5c:1b:62:dd:9c:2e:9d:95
+    Issuer: CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a
+    Subject: CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a
+    Subject Alternative Name:
+        -
+    Validity
+        Not Before: 2018-12-20 09:37:33 +0000 UTC
+        Not After : 2043-12-20 09:37:33 +0000 UTC
+    Authority Key Identifier:
+        -
+    Subject Key Identifier:
+        01:B9:2F:EF:BF:11:86:60:F2:4F:D0:41:6E:AB:73:1F:E7:D2:6E:49
+    From file: ../certformatter/testdata/fewCertificates.pem
+    Raw Certificate:
+        -----BEGIN CERTIFICATE-----
+        MIICbjCCAfOgAwIBAgIQYvYybOXE42hcG2LdnC6dlTAKBggqhkjOPQQDAzB4MQsw
+        CQYDVQQGEwJFUzERMA8GA1UECgwIRk5NVC1SQ00xDjAMBgNVBAsMBUNlcmVzMRgw
+        FgYDVQRhDA9WQVRFUy1RMjgyNjAwNEoxLDAqBgNVBAMMI0FDIFJBSVogRk5NVC1S
+        Q00gU0VSVklET1JFUyBTRUdVUk9TMB4XDTE4MTIyMDA5MzczM1oXDTQzMTIyMDA5
+        MzczM1oweDELMAkGA1UEBhMCRVMxETAPBgNVBAoMCEZOTVQtUkNNMQ4wDAYDVQQL
+        DAVDZXJlczEYMBYGA1UEYQwPVkFURVMtUTI4MjYwMDRKMSwwKgYDVQQDDCNBQyBS
+        QUlaIEZOTVQtUkNNIFNFUlZJRE9SRVMgU0VHVVJPUzB2MBAGByqGSM49AgEGBSuB
+        BAAiA2IABPa6V1PIyqvfNkpSIeSX0oNnnvBlUdBeh8dHsVnyV0ebAAKTRBdp20LH
+        sbI6GA60XYyzZl2hNPk2LEnb80b8s0RpRBNm/dfF/a82Tc4DTQdxz69qBdKiQ1oK
+        Um8BA06Oi6NCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwHQYD
+        VR0OBBYEFAG5L++/EYZg8k/QQW6rcx/n0m5JMAoGCCqGSM49BAMDA2kAMGYCMQCu
+        SuMrQMN0EfKVrRYj3k4MGuZdpSRea0R7/DjiT8ucRRcRTBQnJlU5dUoDzBOQn5IC
+        MQD6SmxgiHPz7riYYqnOK8LZiqZwMR2vsJRM60/G49HzYqc8/5MuB1xJAWdpEgJy
+        v+c=
+        -----END CERTIFICATE-----
+
+[3] Serial Number:
+        39:28:ed:76:45:6f:84:d0:77:9a:cb:0c:0f:e2:f4:d3:87:e5:b3:64
+    Issuer: CN=example.com
+    Subject: CN=example.com
+    Subject Alternative Name:
+        DNS:example.com, DNS:*.example.com, IP Address:10.0.0.1, IP Address:127.0.0.1
+    Validity
+        Not Before: 2024-10-07 15:44:12 +0000 UTC
+        Not After : 2034-10-05 15:44:12 +0000 UTC
+    Authority Key Identifier:
+        12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55
+    Subject Key Identifier:
+        12:97:38:99:6E:64:A2:7E:CB:2F:57:7D:5B:E6:10:17:F7:2A:CA:55
+    From file: ../certformatter/testdata/fewCertificates.pem
+    Raw Certificate:
+        -----BEGIN CERTIFICATE-----
+        MIIFQjCCAyqgAwIBAgIUOSjtdkVvhNB3mssMD+L004fls2QwDQYJKoZIhvcNAQEL
+        BQAwFjEUMBIGA1UEAwwLZXhhbXBsZS5jb20wHhcNMjQxMDA3MTU0NDEyWhcNMzQx
+        MDA1MTU0NDEyWjAWMRQwEgYDVQQDDAtleGFtcGxlLmNvbTCCAiIwDQYJKoZIhvcN
+        AQEBBQADggIPADCCAgoCggIBANuEMkqyS0UrlkAMKMzPsmvdwp0fefH564JXXOZ5
+        v5TnkubqI7ijKBXwSvPCTCuebZFYqIpqN58dSyeMewkEjngAH99+NAuIlt5nyAg5
+        +BxZiRNgugdnc6kAcBH+2C/3T4P0HSd0NPGVQOC4GxMAy6Shz5LiztunPkWPUxWy
+        8OZYO86xilW4L6Dv6JuPCsX7vzv90a31rtfghPlFUz4frcfGpdmTUeXv38/aVZRz
+        ToGgMvQUIaVvfxfmTqrWLCTy/4sTvIY8mVgCaGw5wNDv2oUiZ7C18w0orWeY0vc4
+        b+F+ma2Mwa04pj0KluwJFx85qH3lEk50yfnLYWUr3ZYwu2TOTqpDr61aR+NZqbw+
+        QZWrUImipTzbtVqezmzCLQqXI3zPsmhXb6+k/Ykj1xj9deE7vYAIc8MBVxhw1pYQ
+        fxRgx+dhyZpqYDW8fCUF/5vXtABm9we+/edL7vFKfBuSipeZeAie+a+SO6aMLCIZ
+        rMnH1PdJjzKTbCuWGA6K75y6X3vh2qenmh0/qVJljKktWfWq4Gp5u6EjcZ2mljzh
+        kDMMrRikWq/ThLOFLHC1wjy3IQ7SLGfnM9qharpHTVinwU1g97RGdzFXiB+y69O1
+        MlIlIXWeNJsU94pf1VidKz1hLJynw5cx7ifU+eSvbRU0ZLIHjuX3G4gVlwkUKPNN
+        rdgXAgMBAAGjgYcwgYQwHQYDVR0OBBYEFBKXOJluZKJ+yy9XfVvmEBf3KspVMB8G
+        A1UdIwQYMBaAFBKXOJluZKJ+yy9XfVvmEBf3KspVMA8GA1UdEwEB/wQFMAMBAf8w
+        MQYDVR0RBCowKIILZXhhbXBsZS5jb22CDSouZXhhbXBsZS5jb22HBAoAAAGHBH8A
+        AAEwDQYJKoZIhvcNAQELBQADggIBAEFfjgkurGI/ouVaJgCJYXmf+mJtexN6JYAB
+        XuCcobhUM+t5bfYt9DbZhaNC3pvtT9OijujajnXmd20QJLgXbWJe3qMbiDYroXZ/
+        ry8JHX9Nlp3wF3V/iGUQw4zLnFRalAeSyEAwg+nsoTwA6vkCompNFqzozh2ViSo+
+        ucWkb71Ky7Fl3HmKxp9ohG/0REwLTMYYmlPaGvk4o3oWAH3jm6g0fuFiw3mC1Gvr
+        nFiMva0JJ3LvaOZfoe2U2dSCFEleNqVMEvLNRF4Sd6SFR7/IhwjzvyxSw0DRSmmt
+        FZPakLw1Dm2eibT0rhEhn+7fLVHbaTSgOg8diXKqI+kqxbReYbrGkfa4lIfrvAMi
+        +ax9OQ54KIdQU3uqugyyTqqN1WERjvuv0uhWSF1sEk6AdpMWR8ymircQ72yEJmjI
+        ycRC2okZKkhYwFHb4nYwhQJOtzkmIUc90xmXZK4EvC9SYbHDu/8RBFRqkF4BnE8y
+        4eoywGFMRIJ4GdAzaI7rpQmtSvbZsiismBkTGU/IibM6udnnp5xD4R3HDDSdrkMH
+        MpupMy3sYHTJ+pi4OdpvYBfQHy1Cq0RxRc5SCSb0Dn6IggUVgyG0QpT4SuIM5qt8
+        3cp1JPJuZpbks3EkjqeyzKgfWsJWWi/9q68zbubW5oOgHk2548BO9x2njvEVfrTg
+        rDo5uzq8
+        -----END CERTIFICATE-----`

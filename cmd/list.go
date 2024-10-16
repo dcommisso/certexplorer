@@ -53,6 +53,7 @@ to quickly create a Cobra application.`,
 			}
 
 			selectedFields, _ := cmd.Flags().GetStringSlice("fields")
+			selectedCertIndexes, _ := cmd.Flags().GetIntSlice("certificates")
 
 			// return error if selectedFields contains invalid field
 			for _, selectedField := range selectedFields {
@@ -73,9 +74,17 @@ to quickly create a Cobra application.`,
 			}
 
 			certsToRender := []certformatter.FormattedCertificate{}
-			for i := 0; i < len(c.certstore.Certs); i++ {
-				certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+			// if no cert index was selected, get them all
+			if len(selectedCertIndexes) == 0 {
+				for i := range c.certstore.Certs {
+					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+				}
+			} else {
+				for _, i := range selectedCertIndexes {
+					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+				}
 			}
+
 			renderedOutput, err := formatter.ComposeFormattedCertificates(certsToRender, selectedOutputField)
 			if err != nil {
 				return err
@@ -91,4 +100,5 @@ to quickly create a Cobra application.`,
 
 func getListCmdSetFlags(c *cobra.Command) {
 	c.Flags().StringSliceP("fields", "f", []string{}, "Fields to show.")
+	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
 }
