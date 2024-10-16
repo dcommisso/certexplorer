@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/dcommisso/cabundleinspect/certformatter"
 	"github.com/spf13/cobra"
@@ -76,11 +77,14 @@ to quickly create a Cobra application.`,
 			certsToRender := []certformatter.FormattedCertificate{}
 			// if no cert index was selected, get them all
 			if len(selectedCertIndexes) == 0 {
-				for i := range c.certstore.Certs {
+				for i := 0; i < len(c.certstore.Certs); i++ {
 					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
 				}
 			} else {
 				for _, i := range selectedCertIndexes {
+					if _, ok := c.certstore.Certs[i]; !ok {
+						return errors.New(fmt.Sprintf("certificate index %v out of range", i))
+					}
 					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
 				}
 			}

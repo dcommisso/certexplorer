@@ -230,6 +230,11 @@ func TestList(t *testing.T) {
 			expectedOut:   certformatter.SomeCertificatesAllCertsAllField,
 			expectedError: "",
 		},
+		"Some certificates - all fields - invalid cert index": {
+			inputParams:   []string{"list", "-c", "1,7", getTestdataDir() + "fewCertificates.pem"},
+			expectedOut:   "",
+			expectedError: "Error: certificate index 7 out of range",
+		},
 	}
 
 	for name, tc := range cases {
