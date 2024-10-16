@@ -36,6 +36,9 @@ the certificate fields to show.`,
 func Execute() {
 	config := NewConfiguration()
 	rootCmd := config.GetRootCmd()
+	// needed because, for some mysterious reasons, cmd.Print default to stderr.
+	// Put it here because this function it's not executed during test.
+	rootCmd.SetOut(os.Stdout)
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
