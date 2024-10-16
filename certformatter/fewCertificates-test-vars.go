@@ -179,7 +179,7 @@ const FewCertificatesAllCertsAllField = `[0] Serial Number:
         rDo5uzq8
         -----END CERTIFICATE-----`
 
-const SomeCertificatesAllCertsAllField = `[1] Serial Number:
+const FewCertificatesSomeCertsAllField = `[1] Serial Number:
         62:f6:32:6c:e5:c4:e3:68:5c:1b:62:dd:9c:2e:9d:95
     Issuer: CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a
     Subject: CN=AC RAIZ FNMT-RCM SERVIDORES SEGUROS,OU=Ceres,O=FNMT-RCM,C=ES,2.5.4.97=#130f56415445532d51323832363030344a
@@ -257,3 +257,19 @@ const SomeCertificatesAllCertsAllField = `[1] Serial Number:
         3cp1JPJuZpbks3EkjqeyzKgfWsJWWi/9q68zbubW5oOgHk2548BO9x2njvEVfrTg
         rDo5uzq8
         -----END CERTIFICATE-----`
+
+const FewCertificatesSomeCertsSomeField = `[2] Serial Number:
+        0d:d3:e3:bc:6c:f9:6b:b1
+    Subject: SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES
+    Issuer: SERIALNUMBER=G63287510,CN=ANF Secure Server Root CA,OU=ANF CA Raiz,O=ANF Autoridad de Certificacion,C=ES
+    Not Before: 2019-09-04 10:00:38 +0000 UTC
+    Authority Key Identifier:
+        9C:5F:D0:6C:63:A3:5F:93:CA:93:98:08:AD:8C:87:A5:2C:5C:C1:37
+
+[0] Serial Number:
+        5d:93:8d:30:67:36:c8:06:1d:1a:c7:54:84:69:07
+    Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES
+    Issuer: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES
+    Not Before: 2008-10-29 15:59:56 +0000 UTC
+    Authority Key Identifier:
+        -`

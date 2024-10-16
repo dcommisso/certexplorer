@@ -227,13 +227,23 @@ func TestList(t *testing.T) {
 		},
 		"Some certificates - all fields": {
 			inputParams:   []string{"list", "-c", "1,3", getTestdataDir() + "fewCertificates.pem"},
-			expectedOut:   certformatter.SomeCertificatesAllCertsAllField,
+			expectedOut:   certformatter.FewCertificatesSomeCertsAllField,
 			expectedError: "",
 		},
 		"Some certificates - all fields - invalid cert index": {
 			inputParams:   []string{"list", "-c", "1,7", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   "",
 			expectedError: "Error: certificate index 7 out of range",
+		},
+		"Some certificates - some fields - invalid fields": {
+			inputParams:   []string{"list", "-c", "1,2", "-f", "subject,invalid", getTestdataDir() + "fewCertificates.pem"},
+			expectedOut:   "",
+			expectedError: "Error: invalid field",
+		},
+		"Some certificates - some fields": {
+			inputParams:   []string{"list", "-c", "2,0", "-f", "serial,subject,issuer,notbefore,akid", getTestdataDir() + "fewCertificates.pem"},
+			expectedOut:   certformatter.FewCertificatesSomeCertsSomeField,
+			expectedError: "",
 		},
 	}
 
