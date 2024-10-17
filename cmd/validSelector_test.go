@@ -3,7 +3,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/dcommisso/cabundleinspect/certformatter"
+	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -23,9 +23,9 @@ import (
 
 func (c *Configuration) GetRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "cabundleinspect",
-		Short: "cabundleinspect allow to analyze big cabundle files",
-		Long: `cabundleinspect is able to read certificates from multiple
+		Use:   "certexplorer",
+		Short: "certexplorer allow to analyze big cabundle files",
+		Long: `certexplorer is able to read certificates from multiple
 files. The output is flexible and it's possible to choose
 the certificate fields to show.`,
 	}

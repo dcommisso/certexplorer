@@ -1,4 +1,4 @@
-module github.com/dcommisso/cabundleinspect
+module github.com/dcommisso/certexplorer
 
 go 1.22.4
 

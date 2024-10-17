@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/dcommisso/cabundleinspect/certformatter"
+	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/spf13/cobra"
 )
 

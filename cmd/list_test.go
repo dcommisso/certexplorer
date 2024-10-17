@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dcommisso/cabundleinspect/certformatter"
+	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )

@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/dcommisso/cabundleinspect/cmd"
+import "github.com/dcommisso/certexplorer/cmd"
 
 func main() {
 	cmd.Execute()

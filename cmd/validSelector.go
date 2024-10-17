@@ -7,7 +7,7 @@ import (
 	"slices"
 	"text/tabwriter"
 
-	"github.com/dcommisso/cabundleinspect/certformatter"
+	"github.com/dcommisso/certexplorer/certformatter"
 )
 
 // key of the map is the name of the selector passed on command line
