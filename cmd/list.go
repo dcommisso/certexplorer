@@ -26,31 +26,12 @@ to quickly create a Cobra application.`,
 
 			formatter := c.certstore.NewFormatter()
 
-			validSelectors := map[string]certformatter.Outputfield{
-				"serial":    certformatter.OutputFieldSerialNumber,
-				"issuer":    certformatter.OutputFieldIssuer,
-				"subject":   certformatter.OutputFieldSubject,
-				"validity":  certformatter.OutputFieldValidity,
-				"notbefore": certformatter.OutputFieldNotBefore,
-				"notafter":  certformatter.OutputFieldNotAfter,
-				"skid":      certformatter.OutputFieldSKID,
-				"akid":      certformatter.OutputFieldAKID,
-				"san":       certformatter.OutputFieldSANs,
-				"raw":       certformatter.OutputFieldRawCert,
-				"source":    certformatter.OutputFieldSourceFile,
-			}
+			validSelectors := getValidSelectors()
 
 			// fields order when no fields are selected
-			orderedDefaultFields := []string{
-				"serial",
-				"issuer",
-				"subject",
-				"san",
-				"validity",
-				"akid",
-				"skid",
-				"source",
-				"raw",
+			orderedDefaultFields, err := validSelectors.getDefaultOrder()
+			if err != nil {
+				return err
 			}
 
 			selectedFields, _ := cmd.Flags().GetStringSlice("fields")
@@ -71,7 +52,7 @@ to quickly create a Cobra application.`,
 			// convert string selected fields to Outputfields
 			selectedOutputField := []certformatter.Outputfield{}
 			for _, field := range selectedFields {
-				selectedOutputField = append(selectedOutputField, validSelectors[field])
+				selectedOutputField = append(selectedOutputField, validSelectors.getOutputField(field))
 			}
 
 			certsToRender := []certformatter.FormattedCertificate{}
@@ -103,6 +84,67 @@ to quickly create a Cobra application.`,
 }
 
 func getListCmdSetFlags(c *cobra.Command) {
-	c.Flags().StringSliceP("fields", "f", []string{}, "Fields to show.")
+	validSelectors := getValidSelectors()
+	c.Flags().StringSliceP("fields", "f", []string{}, validSelectors.getFullUsage("List of fields to show: `field1,field2,...`"))
 	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
+}
+
+func getValidSelectors() validSelectorSet {
+	return validSelectorSet{
+		"serial": {
+			outputField: certformatter.OutputFieldSerialNumber,
+			description: "Serial Number",
+			priority:    1,
+		},
+		"issuer": {
+			outputField: certformatter.OutputFieldIssuer,
+			description: "Issuer",
+			priority:    2,
+		},
+		"subject": {
+			outputField: certformatter.OutputFieldSubject,
+			description: "Subject",
+			priority:    3,
+		},
+		"validity": {
+			outputField: certformatter.OutputFieldValidity,
+			description: "Validity of the certificate",
+			priority:    5,
+		},
+		"notbefore": {
+			outputField: certformatter.OutputFieldNotBefore,
+			description: "Not Before date of certificate",
+			priority:    0,
+		},
+		"notafter": {
+			outputField: certformatter.OutputFieldNotAfter,
+			description: "Not After date of certificate",
+			priority:    0,
+		},
+		"skid": {
+			outputField: certformatter.OutputFieldSKID,
+			description: "Subject Key Identifier",
+			priority:    7,
+		},
+		"akid": {
+			outputField: certformatter.OutputFieldAKID,
+			description: "Authority Key Identifier",
+			priority:    6,
+		},
+		"san": {
+			outputField: certformatter.OutputFieldSANs,
+			description: "Subject Alternative Names",
+			priority:    4,
+		},
+		"raw": {
+			outputField: certformatter.OutputFieldRawCert,
+			description: "Raw certificate",
+			priority:    9,
+		},
+		"source": {
+			outputField: certformatter.OutputFieldSourceFile,
+			description: "The file containing the certificate",
+			priority:    8,
+		},
+	}
 }
