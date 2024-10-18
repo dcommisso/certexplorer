@@ -25,8 +25,13 @@ to quickly create a Cobra application.`,
 			}
 
 			formatter := c.certstore.NewFormatter()
-
 			validSelectors := getValidSelectors()
+			validOutputs := getValidOuput()
+			selectedOutput, _ := cmd.Flags().GetString("output")
+			formatter, err = validOutputs.getFormatter(c.certstore, selectedOutput)
+			if err != nil {
+				return err
+			}
 
 			// fields order when no fields are selected
 			orderedDefaultFields, err := validSelectors.getDefaultOrder()
@@ -85,6 +90,8 @@ to quickly create a Cobra application.`,
 
 func getListCmdSetFlags(c *cobra.Command) {
 	validSelectors := getValidSelectors()
+	validOutputs := getValidOuput()
 	c.Flags().StringSliceP("fields", "f", []string{}, validSelectors.getFullUsage("List of fields to show: `field1,field2,...`"))
 	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
+	c.Flags().StringP("output", "o", "nice", validOutputs.getFullUsage("Output `format`"))
 }
