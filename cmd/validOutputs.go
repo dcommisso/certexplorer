@@ -20,7 +20,7 @@ func (v validOutputs) getFullUsage(header string) string {
 	}
 	slices.Sort(sortedKeys)
 
-	return fmt.Sprintf("%s. One of: [%s]", header, strings.Join(sortedKeys, " |"))
+	return fmt.Sprintf("%s. One of: [%s]", header, strings.Join(sortedKeys, " | "))
 }
 
 func (v validOutputs) getFormatter(certstore *certformatter.Certstore, outputName string) (*certformatter.Formatter, error) {
@@ -33,7 +33,8 @@ func (v validOutputs) getFormatter(certstore *certformatter.Certstore, outputNam
 
 func getValidOuput() validOutputs {
 	validOutputs := validOutputs{
-		"nice": getNiceFormatter,
+		"nice":  getNiceFormatter,
+		"plain": getPlainFormatter,
 	}
 	return validOutputs
 }
@@ -126,4 +127,38 @@ func colorIfExpiredOrAboutTo(expiration time.Time) string {
 		return color.YellowString(expiration.String())
 	}
 	return expiration.String()
+}
+
+// definition of plain formatter
+func getPlainFormatter(certstore *certformatter.Certstore) *certformatter.Formatter {
+	formatter := certstore.NewFormatter()
+
+	formatter.SetFieldFormatFunction(certformatter.OutputFieldRawCert, func(c certformatter.Certificate) string {
+		rawCert := c.GetRawCert()
+		return fmt.Sprintf("Raw Certificate:\n%s", rawCert)
+	})
+
+	formatter.SetComposeFunction(func(certs []certformatter.FormattedCertificate, orderedFieldsToRender []certformatter.Outputfield) (string, error) {
+
+		if len(certs) == 0 {
+			return "", errors.New("certs cannot be empty")
+		}
+
+		if len(orderedFieldsToRender) == 0 {
+			return "", errors.New("orderedFieldsToRender cannot be empty")
+		}
+
+		toOut := ""
+		for _, cert := range certs {
+			toOut += fmt.Sprintf("Certificate #%v\n", cert[certformatter.OutputFieldCertificateIndex])
+			for _, field := range orderedFieldsToRender {
+				toOut += cert[field] + "\n"
+			}
+			// empty line between each certificate
+			toOut += "\n"
+		}
+		return strings.TrimSpace(toOut), nil
+	})
+
+	return formatter
 }
