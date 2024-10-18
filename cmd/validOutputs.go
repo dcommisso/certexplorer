@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/fatih/color"
@@ -59,7 +60,7 @@ func getNiceFormatter(certstore *certformatter.Certstore) *certformatter.Formatt
 
 	formatter.SetFieldFormatFunction(certformatter.OutputFieldValidity, func(c certformatter.Certificate) string {
 		label := labelColor.Sprint("Validity")
-		return fmt.Sprintf("%s\n    Not Before: %s\n    Not After : %s", label, c.GetNotBefore(), c.GetNotAfter())
+		return fmt.Sprintf("%s\n    Not Before: %s\n    Not After : %s", label, c.GetNotBefore(), colorIfExpiredOrAboutTo(c.DecodedCertificate.NotAfter))
 	})
 
 	formatter.SetFieldFormatFunction(certformatter.OutputFieldNotBefore, func(c certformatter.Certificate) string {
@@ -69,7 +70,7 @@ func getNiceFormatter(certstore *certformatter.Certstore) *certformatter.Formatt
 
 	formatter.SetFieldFormatFunction(certformatter.OutputFieldNotAfter, func(c certformatter.Certificate) string {
 		label := labelColor.Sprint("Not After:")
-		return fmt.Sprintf("%s %s", label, c.GetNotAfter())
+		return fmt.Sprintf("%s %s", label, colorIfExpiredOrAboutTo(c.DecodedCertificate.NotAfter))
 	})
 
 	formatter.SetFieldFormatFunction(certformatter.OutputFieldSKID, func(c certformatter.Certificate) string {
@@ -116,4 +117,13 @@ func getNiceFormatter(certstore *certformatter.Certstore) *certformatter.Formatt
 		return fmt.Sprintf("%s\n%s", label, rawCertFormatted)
 	})
 	return formatter
+}
+
+func colorIfExpiredOrAboutTo(expiration time.Time) string {
+	if time.Now().After(expiration) {
+		return color.RedString(expiration.String())
+	} else if time.Until(expiration) < time.Hour*24*30 {
+		return color.YellowString(expiration.String())
+	}
+	return expiration.String()
 }
