@@ -75,3 +75,63 @@ func (v validSelectorSet) getDefaultOrder() ([]string, error) {
 	}
 	return orderedSelectors, nil
 }
+
+func getValidSelectors() validSelectorSet {
+	return validSelectorSet{
+		"serial": {
+			outputField: certformatter.OutputFieldSerialNumber,
+			description: "Serial Number",
+			priority:    1,
+		},
+		"issuer": {
+			outputField: certformatter.OutputFieldIssuer,
+			description: "Issuer",
+			priority:    2,
+		},
+		"subject": {
+			outputField: certformatter.OutputFieldSubject,
+			description: "Subject",
+			priority:    3,
+		},
+		"validity": {
+			outputField: certformatter.OutputFieldValidity,
+			description: "Validity of the certificate",
+			priority:    5,
+		},
+		"notbefore": {
+			outputField: certformatter.OutputFieldNotBefore,
+			description: "Not Before date of certificate",
+			priority:    0,
+		},
+		"notafter": {
+			outputField: certformatter.OutputFieldNotAfter,
+			description: "Not After date of certificate",
+			priority:    0,
+		},
+		"skid": {
+			outputField: certformatter.OutputFieldSKID,
+			description: "Subject Key Identifier",
+			priority:    7,
+		},
+		"akid": {
+			outputField: certformatter.OutputFieldAKID,
+			description: "Authority Key Identifier",
+			priority:    6,
+		},
+		"san": {
+			outputField: certformatter.OutputFieldSANs,
+			description: "Subject Alternative Names",
+			priority:    4,
+		},
+		"raw": {
+			outputField: certformatter.OutputFieldRawCert,
+			description: "Raw certificate",
+			priority:    9,
+		},
+		"source": {
+			outputField: certformatter.OutputFieldSourceFile,
+			description: "The file containing the certificate",
+			priority:    8,
+		},
+	}
+}
