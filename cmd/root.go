@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/fatih/color"
@@ -27,11 +28,11 @@ import (
 
 func (c *Configuration) GetRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "certexplorer",
-		Short: "certexplorer allow to analyze big cabundle files",
-		Long: `certexplorer is able to read certificates from multiple
-files. The output is flexible and it's possible to choose
-the certificate fields to show.`,
+		Use:     getUse(),
+		Short:   getShort(),
+		Long:    getLongDescription(),
+		Example: getExample(),
+		Version: getVersion(),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			noColor, _ := cmd.Flags().GetBool("no-color")
 			if noColor {
@@ -123,7 +124,57 @@ func getRootCmdSetFlags(c *cobra.Command) {
 	validSelectors := getValidSelectors()
 	validOutputs := getValidOuput()
 	c.Flags().StringSliceP("fields", "f", []string{}, validSelectors.getFullUsage("List of fields to show: `field1,field2,...`"))
-	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
+	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show: `index1,index2...`")
 	c.Flags().StringP("output", "o", "nice", validOutputs.getFullUsage("Output `format`"))
 	c.Flags().Bool("no-color", false, "Disable colors.")
+}
+
+func getUse() string {
+	return "certexplorer [file1 file2 ...]"
+}
+
+func getShort() string {
+	return "certexplorer (nicely) shows certificates with flexible output options"
+}
+
+func getLongDescription() string {
+
+	longDescription := `
+certexplorer
+
+certexplorer helps to go through cabundle files full of certificates as well as
+quickly view a single certificate. By default the certificates are nicely
+formatted, but it's possible to disable colors or get them in a plain output for
+easily manage the raw certificates somewhere else. The output options permit to
+select which certificates and which fields to show (in the order given). The
+certificates can be read from multiple files or standard input.
+
+The default output ("nice") also color the expiration date (red for expired
+certificates, yellow for certificates expiring in less than a month).
+`
+	return strings.TrimSpace(longDescription)
+}
+
+func getExample() string {
+	examples := `
+# Get all the default fields for all the certificates in provided files
+$ certexplorer certificate.pem cabundle-full-of-certificates.pem
+
+# Get only the serial number and the validity of the certificates in provided files
+$ certexplorer certificate.pem cabundle-full-of-certificates.pem -f serial,validity
+
+# Get only the serial number and the validity of the certificates 119 and 3 in provided files
+$ certexplorer certificate.pem cabundle-full-of-certificates.pem -f serial,validity -c 119,3
+
+# Get the expiration date and the subject of a certificate from standard input
+echo "-----BEGIN CERTIFICATE----- ..." | certexplorer -f notafter,subject
+
+# Get some certificates from cabundle in plain output (useful for get the raw certificate without indentation)
+$ certexplorer cabundle-full-of-certificates.pem -c 1,5 -o plain
+`
+	return strings.TrimSpace(examples)
+}
+
+func getVersion() string {
+	return "v1.0.0"
 }
