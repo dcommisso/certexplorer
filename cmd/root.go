@@ -64,7 +64,7 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 			// return error if selectedFields contains invalid field
 			for _, selectedField := range selectedFields {
 				if _, ok := validSelectors[selectedField]; !ok {
-					return errors.New("invalid field")
+					return errors.New("invalid field\n")
 				}
 			}
 
@@ -88,7 +88,7 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 			} else {
 				for _, i := range selectedCertIndexes {
 					if _, ok := c.certstore.Certs[i]; !ok {
-						return errors.New(fmt.Sprintf("certificate index %v out of range", i))
+						return errors.New(fmt.Sprintf("certificate index %v out of range\n", i))
 					}
 					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
 				}
