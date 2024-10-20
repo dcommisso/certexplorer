@@ -1,0 +1,8 @@
+[allowlist]
+  description = "Global Allowlist"
+
+  paths =[
+  # Ignore the test file with fake private key
+  '''certformatter\/certs_test.go''',
+  '''internal/certs/certs_test.go'''
+]
