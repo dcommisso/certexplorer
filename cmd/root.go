@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/dcommisso/certexplorer/certformatter"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -32,6 +33,11 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 files. The output is flexible and it's possible to choose
 the certificate fields to show.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			noColor, _ := cmd.Flags().GetBool("no-color")
+			if noColor {
+				color.NoColor = true
+			}
+
 			err := LoadFilesOrStdin(cmd, c)
 			if err != nil {
 				return err
@@ -119,4 +125,5 @@ func getRootCmdSetFlags(c *cobra.Command) {
 	c.Flags().StringSliceP("fields", "f", []string{}, validSelectors.getFullUsage("List of fields to show: `field1,field2,...`"))
 	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
 	c.Flags().StringP("output", "o", "nice", validOutputs.getFullUsage("Output `format`"))
+	c.Flags().Bool("no-color", false, "Disable colors.")
 }
