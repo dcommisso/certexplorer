@@ -211,11 +211,11 @@ func TestPlainOutput(t *testing.T) {
 		expectedOut string
 	}{
 		"all certificates - all fields": {
-			inputParams: []string{"list", "-o", "plain", getTestdataDir() + "fewCertificates.pem"},
+			inputParams: []string{"-o", "plain", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut: plainOutputAllCertsAllFields,
 		},
 		"Some certificates - some fields": {
-			inputParams: []string{"list", "-o", "plain", "-c", "2,0", "-f", "serial,subject,issuer,notbefore,akid", getTestdataDir() + "fewCertificates.pem"},
+			inputParams: []string{"-o", "plain", "-c", "2,0", "-f", "serial,subject,issuer,notbefore,akid", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut: plainOutputSomCertsSomeFields,
 		},
 	}

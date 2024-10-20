@@ -187,7 +187,7 @@ func TestList(t *testing.T) {
 		expectedError string
 	}{
 		"all certificates - some flags": {
-			inputParams: []string{"list", "-f", "subject,issuer,san,validity", getTestdataDir() + "fewCertificates.pem"},
+			inputParams: []string{"-f", "subject,issuer,san,validity", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut: `[0] Subject: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES
     Issuer: OU=AC RAIZ FNMT-RCM,O=FNMT-RCM,C=ES
     Subject Alternative Name:
@@ -221,27 +221,27 @@ func TestList(t *testing.T) {
         Not After : 2034-10-05 15:44:12 +0000 UTC`,
 		},
 		"all certificates - all fields": {
-			inputParams:   []string{"list", getTestdataDir() + "fewCertificates.pem"},
+			inputParams:   []string{getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   certformatter.FewCertificatesAllCertsAllField,
 			expectedError: "",
 		},
 		"Some certificates - all fields": {
-			inputParams:   []string{"list", "-c", "1,3", getTestdataDir() + "fewCertificates.pem"},
+			inputParams:   []string{"-c", "1,3", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   certformatter.FewCertificatesSomeCertsAllField,
 			expectedError: "",
 		},
 		"Some certificates - all fields - invalid cert index": {
-			inputParams:   []string{"list", "-c", "1,7", getTestdataDir() + "fewCertificates.pem"},
+			inputParams:   []string{"-c", "1,7", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   "",
 			expectedError: "Error: certificate index 7 out of range",
 		},
 		"Some certificates - some fields - invalid fields": {
-			inputParams:   []string{"list", "-c", "1,2", "-f", "subject,invalid", getTestdataDir() + "fewCertificates.pem"},
+			inputParams:   []string{"-c", "1,2", "-f", "subject,invalid", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   "",
 			expectedError: "Error: invalid field",
 		},
 		"Some certificates - some fields": {
-			inputParams:   []string{"list", "-c", "2,0", "-f", "serial,subject,issuer,notbefore,akid", getTestdataDir() + "fewCertificates.pem"},
+			inputParams:   []string{"-c", "2,0", "-f", "serial,subject,issuer,notbefore,akid", getTestdataDir() + "fewCertificates.pem"},
 			expectedOut:   certformatter.FewCertificatesSomeCertsSomeField,
 			expectedError: "",
 		},

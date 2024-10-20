@@ -16,8 +16,11 @@ limitations under the License.
 package cmd
 
 import (
+	"errors"
+	"fmt"
 	"os"
 
+	"github.com/dcommisso/certexplorer/certformatter"
 	"github.com/spf13/cobra"
 )
 
@@ -28,8 +31,73 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 		Long: `certexplorer is able to read certificates from multiple
 files. The output is flexible and it's possible to choose
 the certificate fields to show.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			err := LoadFilesOrStdin(cmd, c)
+			if err != nil {
+				return err
+			}
+
+			formatter := c.certstore.NewFormatter()
+			validSelectors := getValidSelectors()
+			validOutputs := getValidOuput()
+			selectedOutput, _ := cmd.Flags().GetString("output")
+			formatter, err = validOutputs.getFormatter(c.certstore, selectedOutput)
+			if err != nil {
+				return err
+			}
+
+			// fields order when no fields are selected
+			orderedDefaultFields, err := validSelectors.getDefaultOrder()
+			if err != nil {
+				return err
+			}
+
+			selectedFields, _ := cmd.Flags().GetStringSlice("fields")
+			selectedCertIndexes, _ := cmd.Flags().GetIntSlice("certificates")
+
+			// return error if selectedFields contains invalid field
+			for _, selectedField := range selectedFields {
+				if _, ok := validSelectors[selectedField]; !ok {
+					return errors.New("invalid field")
+				}
+			}
+
+			// if no field was selected use default
+			if len(selectedFields) == 0 {
+				selectedFields = orderedDefaultFields
+			}
+
+			// convert string selected fields to Outputfields
+			selectedOutputField := []certformatter.Outputfield{}
+			for _, field := range selectedFields {
+				selectedOutputField = append(selectedOutputField, validSelectors.getOutputField(field))
+			}
+
+			certsToRender := []certformatter.FormattedCertificate{}
+			// if no cert index was selected, get them all
+			if len(selectedCertIndexes) == 0 {
+				for i := 0; i < len(c.certstore.Certs); i++ {
+					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+				}
+			} else {
+				for _, i := range selectedCertIndexes {
+					if _, ok := c.certstore.Certs[i]; !ok {
+						return errors.New(fmt.Sprintf("certificate index %v out of range", i))
+					}
+					certsToRender = append(certsToRender, formatter.GetFormattedCertificate(i))
+				}
+			}
+
+			renderedOutput, err := formatter.ComposeFormattedCertificates(certsToRender, selectedOutputField)
+			if err != nil {
+				return err
+			}
+			cmd.Println(renderedOutput)
+
+			return nil
+		},
 	}
-	rootCmdSubcommands(cmd, c)
+	getRootCmdSetFlags(cmd)
 	return cmd
 }
 
@@ -45,7 +113,10 @@ func Execute() {
 	}
 }
 
-// Add subcommands here
-func rootCmdSubcommands(cmd *cobra.Command, c *Configuration) {
-	cmd.AddCommand(c.GetListCmd())
+func getRootCmdSetFlags(c *cobra.Command) {
+	validSelectors := getValidSelectors()
+	validOutputs := getValidOuput()
+	c.Flags().StringSliceP("fields", "f", []string{}, validSelectors.getFullUsage("List of fields to show: `field1,field2,...`"))
+	c.Flags().IntSliceP("certificates", "c", []int{}, "Certificate index numbers to show.")
+	c.Flags().StringP("output", "o", "nice", validOutputs.getFullUsage("Output `format`"))
 }
