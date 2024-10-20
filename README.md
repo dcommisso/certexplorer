@@ -32,7 +32,7 @@ $ certexplorer cabundle-full-of-certificates.pem -c 1,5 -o plain
 
 Run `certexplorer --help` for the full documentation.
 
-# Features
+## Features
 - Certificates can be read from multiple files or standard input.
 - Flexible output: it's possible to choose which certificates and fields (and in what order) to get.
 - By default the expiration date is colored red if the certificate is expired or yellow if it expires in less than a month.
