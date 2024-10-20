@@ -159,6 +159,7 @@ func TestFileLoad(t *testing.T) {
 			}
 
 			if tc.inputStdin != "" {
+				config.setTestMode(true)
 				testCmd.SetIn(strings.NewReader(tc.inputStdin))
 			}
 

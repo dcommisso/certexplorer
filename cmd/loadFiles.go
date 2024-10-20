@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"io"
 	"os"
 
@@ -19,12 +20,22 @@ func LoadFilesOrStdin(cmd *cobra.Command, config *Configuration) error {
 			}
 			config.certstore.Load(b, fname)
 		}
-	} else {
+		return nil
+	}
+
+	// check if there's stuff on stdin
+	stdinstat, err := os.Stdin.Stat()
+	if err != nil {
+		return err
+	}
+	if stdinstat.Mode()&os.ModeNamedPipe != 0 || config.testMode {
 		b, err := io.ReadAll(cmd.InOrStdin())
 		if err != nil {
 			return err
 		}
 		config.certstore.Load(b, stdinLabel)
+		return nil
 	}
-	return nil
+
+	return errors.New("no files or stdin provided\n")
 }
