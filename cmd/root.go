@@ -44,11 +44,10 @@ func (c *Configuration) GetRootCmd() *cobra.Command {
 				return err
 			}
 
-			formatter := c.certstore.NewFormatter()
 			validSelectors := getValidSelectors()
 			validOutputs := getValidOuput()
 			selectedOutput, _ := cmd.Flags().GetString("output")
-			formatter, err = validOutputs.getFormatter(c.certstore, selectedOutput)
+			formatter, err := validOutputs.getFormatter(c.certstore, selectedOutput)
 			if err != nil {
 				return err
 			}
