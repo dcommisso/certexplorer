@@ -8,7 +8,7 @@
 `certexplorer` requires Go 1.22 or later.
 
 ``` shell
-$ go install github.com/dcommisso/certexplorer@latest
+go install github.com/dcommisso/certexplorer@latest
 ```
 
 ## Usage
