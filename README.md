@@ -24,7 +24,7 @@ $ certexplorer certificate.pem cabundle-full-of-certificates.pem -f serial,valid
 $ certexplorer certificate.pem cabundle-full-of-certificates.pem -f serial,validity -c 119,3
 
 # Get the expiration date and the subject of a certificate from standard input
-echo "-----BEGIN CERTIFICATE----- ..." | certexplorer -f notafter,subject
+$ echo "-----BEGIN CERTIFICATE----- ..." | certexplorer -f notafter,subject
 
 # Get some certificates from cabundle in plain output (useful for get the raw certificate without indentation)
 $ certexplorer cabundle-full-of-certificates.pem -c 1,5 -o plain
